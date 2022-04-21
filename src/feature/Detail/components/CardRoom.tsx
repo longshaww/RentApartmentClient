@@ -17,13 +17,15 @@ import { Link } from "react-router-dom";
 import "../../../assets/css/link.scss";
 import dataCardRoom from "../../../assets/json/card-room";
 import { ReactComponent as Icon4 } from "../../../assets/svg/icon4.svg";
+import globalStateAndAction from "../../../container/global.state.action";
 
-const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
+const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
+	console.log(detail);
 	return (
 		<>
 			<div>
-				{dataDetail.canHos &&
-					dataDetail.canHos.map((canho: any) => {
+				{detail.canHos &&
+					detail.canHos.map((canho: any) => {
 						return (
 							<Card className="shadow rounded mb-3 bg_card_room">
 								<CardBody>
@@ -313,4 +315,4 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 		</>
 	);
 };
-export default CardRoom;
+export default globalStateAndAction(CardRoom);
