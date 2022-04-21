@@ -1,0 +1,86 @@
+.width {
+  height: auto;
+  &_img {
+    max-width: 16.55%;
+    height: auto;
+  }
+}
+
+.rigth {
+  text-align: end;
+}
+
+.card-text {
+  margin-bottom: 5px;
+}
+
+.size-color_price {
+  font-size: 24px;
+  color: #f96d01;
+  &_room {
+    color: #f96d01;
+  }
+}
+
+button.btn_price {
+  color: #fff;
+  border: none;
+  background-color: #f96d01;
+  &:hover {
+    color: #fff;
+    border: none;
+    background-color: rgb(223, 68, 15);
+  }
+  &:focus {
+    color: #fff;
+    border: none;
+    background-color: rgb(223, 68, 15);
+  }
+}
+
+.width_icon_convenient {
+  width: 32px;
+}
+
+.slide-thumbs {
+  :last-child {
+    padding-right: 0;
+  }
+}
+
+.convenient-link {
+  color: #000;
+  text-decoration: none;
+  &:hover {
+    color: #000;
+  }
+}
+
+$bg_gray: #f1f3f3;
+
+.card.bg_card_room {
+  background-color: $bg_gray;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.color_feature {
+  background-color: rgb(232, 254, 245);
+  color: rgb(0, 135, 90);
+}
+
+button.btn_room_color {
+  background-color: #f5f5f5;
+  border: #f5f5f5;
+  &:hover {
+    background-color: #e1e0e0;
+    border: #e1e0e0;
+  }
+  &:focus {
+    background-color: #e1e0e0;
+    border: #e1e0e0;
+  }
+}
+
+.width_icon_room {
+  width: 16px;
+}

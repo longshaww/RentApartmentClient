@@ -1,0 +1,26 @@
+.color-price {
+  color: #f96d01;
+}
+
+.type {
+  margin: 2px 0 0 0;
+}
+
+.form-select:focus {
+  box-shadow: none;
+}
+
+#form-select-price {
+  padding: 0.375rem 2rem 0.375rem 0rem;
+}
+
+#form-select-price:focus {
+  box-shadow: none;
+}
+
+.ellipsis {
+  width: 390px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
