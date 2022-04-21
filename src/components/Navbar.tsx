@@ -13,6 +13,10 @@ import {
 import { Link } from "react-router-dom";
 import "../assets/css/navbar.scss";
 import "../assets/css/app.scss";
+import { ReactComponent as Logo } from "../assets/svg/logo.svg";
+import { ReactComponent as Icon1 } from "../assets/svg/icon1.svg";
+import { ReactComponent as Icon2 } from "../assets/svg/icon2.svg";
+import { ReactComponent as Icon3 } from "../assets/svg/icon3.svg";
 
 const NavbarApp: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -97,7 +101,7 @@ const NavbarApp: React.FC = () => {
 					<div className="d-flex justify-content-evenly align-items-center">
 						<div id="center-logo" className="">
 							<Link to="/" className="d-inline-block">
-								{/* <Icon name="Logo" /> */}
+								<Logo />
 							</Link>
 						</div>
 						<Navbar expand="md" light className="d-flex">
@@ -109,7 +113,7 @@ const NavbarApp: React.FC = () => {
 											to="/"
 											className="nav-link"
 										>
-											{/* <Icon name="Icon1" /> */}
+											<Icon1 />
 											<span className="ps-1">
 												Tải ứng dụng
 											</span>
@@ -135,7 +139,7 @@ const NavbarApp: React.FC = () => {
 											to="/"
 											className="nav-link"
 										>
-											{/* <Icon name="Icon2" /> */}
+											<Icon2 />
 											<span className="ps-1">
 												Đã lưu
 											</span>
@@ -146,7 +150,7 @@ const NavbarApp: React.FC = () => {
 											to="/"
 											className="nav-link"
 										>
-											{/* <Icon name="Icon3" /> */}
+											<Icon3 />
 											<span className="ps-1">
 												Đăt chỗ của tôi
 											</span>

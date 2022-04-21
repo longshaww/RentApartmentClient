@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import Icon from '../../../components/Icon';
 import {
 	Card,
@@ -12,6 +12,9 @@ import {
 	PopoverBody,
 	PopoverHeader,
 	UncontrolledPopover,
+	Modal,
+	ModalBody,
+	ModalFooter,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "../../../assets/css/link.scss";
@@ -20,10 +23,92 @@ import { ReactComponent as Icon4 } from "../../../assets/svg/icon4.svg";
 import globalStateAndAction from "../../../container/global.state.action";
 
 const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
-	console.log(detail);
+	const [modal, setModal] = useState<any>(false);
+	const [idRoom, setIdRoom] = useState<any>();
+	console.log(idRoom);
+	// Toggle for Modal
+	const toggle = () => {
+		setModal(!modal);
+	};
 	return (
 		<>
 			<div>
+				<Modal
+					size="xl"
+					isOpen={modal}
+					toggle={toggle}
+					centered={true}
+				>
+					<ModalBody className="p-0">
+						<div className="row">
+							<div className="col">
+								<div className="row">
+									<div className="img d-flex justify-content-center rounded p-4 bg-dark">
+										<img
+											src="https://ik.imagekit.io/tvlk/generic-asset/dgXfoyh24ryQLRcGq00cIdKHRmotrWLNlvG-TxlcLxGkiDwaUSggleJNPRgIHCX6/hotel/asset/67778274-a8a05b98c3a3e7746f83a3051001c7f2.jpeg?_src=imagekit&tr=c-at_max,h-360,q-40,w-550"
+											style={{ width: "80%" }}
+										></img>
+									</div>
+								</div>
+								<div className="row d-flex justify-content-start ms-2 my-3">
+									<img
+										src="https://picsum.photos/50/50"
+										style={{
+											width: "12rem",
+											height: "8rem",
+										}}
+									></img>
+									<img
+										src="https://picsum.photos/50/50"
+										style={{
+											width: "12rem",
+											height: "8rem",
+										}}
+									></img>
+								</div>
+							</div>
+							<div className="col-3 h-100">
+								<div className="room-information py-3 border-bottom">
+									<div className="fw-bold">
+										Thông tin phòng
+									</div>
+									<div>17.0m2</div>
+									<div>2 khách</div>
+								</div>
+								<div className="covenient-you-like py-3 border-bottom">
+									<div className="fw-bold">
+										Tính năng phòng bạn thích
+									</div>
+									<div>Tủ lạnh</div>
+									<div>Máy lạnh</div>
+								</div>
+								<div className="room-covenient py-3 border-bottom">
+									<div className="fw-bold">
+										Tiện nghi phòng
+									</div>
+									<ul>
+										<li>Máy lạnh</li>
+										<li>Tủ lạnh</li>
+									</ul>
+								</div>
+								<div className="price-modal p-3 mt-3 shadow ">
+									<small>Khởi điểm từ:</small>
+									<div className="d-flex">
+										<div className="fw-bold text-danger fs-5">
+											619.245 VNĐ
+										</div>
+										<small className="mt-1">
+											/phòng/đêm
+										</small>
+									</div>
+									<button className="btn btn-primary mt-2">
+										Thêm lựa chọn phòng
+									</button>
+								</div>
+							</div>
+						</div>
+					</ModalBody>
+				</Modal>
 				{detail.canHos &&
 					detail.canHos.map((canho: any) => {
 						return (
@@ -35,48 +120,54 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 									<Row>
 										<Col sm="4" className="pe-0">
 											<Card body>
-												{dataCardRoom.imgRoom.map(
-													(Title) => {
-														return (
-															<div className="">
-																<CardImg
-																	width="100%"
-																	alt=""
-																	src={
-																		Title.imgTitle
-																	}
-																/>
-																<div className="d-flex pt-1 slide-thumbs">
-																	{Title.imgItems.map(
-																		(
-																			item,
-																			i
-																		) => {
-																			return (
-																				<CardImg
-																					width="100%"
-																					src={
-																						item.img
-																					}
-																					alt=""
-																					className={
-																						i ===
-																						Title
-																							.imgItems
-																							.length -
-																							1
-																							? ""
-																							: "pe-1"
-																					}
-																				/>
-																			);
-																		}
-																	)}
-																</div>
-															</div>
-														);
-													}
-												)}
+												<div className="">
+													<CardImg
+														width="100%"
+														alt=""
+														src={
+															canho
+																.hinhAnhCanHos[0]
+																? canho
+																		.hinhAnhCanHos[0]
+																		?.urlImageCanHo
+																: "https://via.placeholder.com/350x250"
+														}
+													/>
+													<div className="d-flex pt-1 slide-thumbs">
+														{canho
+															.hinhAnhCanHos
+															.length >
+															0 &&
+															canho.hinhAnhCanHos.map(
+																(
+																	img: any,
+																	i: any
+																) => {
+																	return (
+																		<CardImg
+																			style={{
+																				width: "5rem",
+																			}}
+																			src={
+																				img.urlImageCanHo
+																			}
+																			alt=""
+																			className={
+																				i ===
+																				canho
+																					.hinhAnhCanHos
+																					.length -
+																					1
+																					? ""
+																					: "pe-1"
+																			}
+																		/>
+																	);
+																}
+															)}
+													</div>
+												</div>
+
 												<CardTitle
 													tag="h6"
 													className="pt-2"
@@ -106,13 +197,17 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 													)}
 												</div>
 
-												<Button className="mt-3 text-primary fw-bold btn_room_color link">
-													<Link
-														to={
+												<Button
+													className="mt-3 text-primary fw-bold btn_room_color link"
+													onClick={() => {
+														setModal(
+															!modal
+														);
+														setIdRoom(
 															canho.maCanHo
-														}
-														className="stretched-link"
-													></Link>
+														);
+													}}
+												>
 													Xem chi tiết
 													phòng
 												</Button>
@@ -137,10 +232,9 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 																			className="width_icon_room"
 																		/>
 																		<small className="ps-1 me-5">
-																			1
-																			Giường
-																			Cỡ
-																			Queen
+																			{
+																				canho.thongTinGiuong
+																			}
 																		</small>
 																	</CardText>
 																	<CardText className="">

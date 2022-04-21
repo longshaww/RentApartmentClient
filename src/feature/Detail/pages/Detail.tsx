@@ -6,6 +6,7 @@ import CardRoom from "../components/CardRoom";
 import Convenient from "../components/Convenient";
 import axiosMethod from "../../../utils/api";
 import globalStateAndAction from "../../../container/global.state.action";
+
 // import CardLocation from 'src/components/CardLocation';
 
 const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
