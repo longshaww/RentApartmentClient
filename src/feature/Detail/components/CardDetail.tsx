@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import Icon from "../../../components/Icon";
 import {
 	Card,
@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import dataCardDetail from "../../../assets/json/card-detail";
 
 const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
+	const [imageIndex, setImageIndex] = useState<number>(0);
 	return (
 		<>
 			<Card className="shadow rounded mb-3">
@@ -56,7 +57,8 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 							<img
 								src={
 									detail.hinhAnhBcts &&
-									detail.hinhAnhBcts[0].urlImageBct
+									detail.hinhAnhBcts[imageIndex]
+										.urlImageBct
 								}
 								alt=""
 								style={{ width: "100%" }}
@@ -65,13 +67,17 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 						</div>
 						<div className="col ps-1 slide-thumbs d-flex flex-column justify-content-between">
 							{detail.hinhAnhBcts &&
-								detail.hinhAnhBcts.map((item: any) => (
-									<CardImg
-										//   className={i === sliderDetailRight.length - 1 ? '' : 'pb-2'}
-										width="100%"
-										src={item.urlImageBct}
-									/>
-								))}
+								detail.hinhAnhBcts.map(
+									(item: any, index: number) => (
+										<CardImg
+											width="100%"
+											onClick={() =>
+												setImageIndex(index)
+											}
+											src={item.urlImageBct}
+										/>
+									)
+								)}
 						</div>
 					</div>
 				</CardBody>
@@ -83,7 +89,7 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 								<IcConvenient />
 							</div>
 							<CardText className="type text-info me-1 fw-bold">
-								Tiện lợi - 7.3
+								{detail.diemTienNghi} Tiện lợi
 							</CardText>
 						</h5>
 						<CardText>
@@ -106,7 +112,7 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 				</CardBody>
 				<CardBody className="ps-4">
 					<CardText tag="h5" className="mb-4">
-						Tiện nghi khách sạn
+						Tiện nghi căn hộ
 					</CardText>
 					<div className="d-flex justify-content-start pb-4">
 						{dataCardDetail.convenient.map((item) => {

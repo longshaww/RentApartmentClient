@@ -84,7 +84,10 @@ const CardHome: React.FC = () => {
 											</div>
 											<CardText className="card-text type">
 												<small className="text-info me-1 fw-bold">
-													Tiện lợi - 7.3
+													Tiện lợi -{" "}
+													{
+														item.diemTienNghi
+													}
 												</small>
 												<small className="text-muted">
 													(
