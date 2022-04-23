@@ -22,6 +22,7 @@ import globalStateAndAction from "../../../container/global.state.action";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import axiosMethod from "../../../utils/api";
 import "../../../assets/css/apartment.detail.scss";
+import { Link } from "react-router-dom";
 
 const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 	const [modal, setModal] = useState<any>(false);
@@ -68,12 +69,18 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 								<div className="col bg-dark">
 									<div className="row">
 										<div className="img d-flex justify-content-center p-4">
-											<AiOutlineArrowLeft
+											<div
 												className="text-light fs-1 my-auto me-4"
-												onClick={
-													leftArrowClick
-												}
-											/>
+												style={{
+													cursor: "pointer",
+												}}
+											>
+												<AiOutlineArrowLeft
+													onClick={
+														leftArrowClick
+													}
+												/>
+											</div>
 											<img
 												src={
 													apartment.hinhAnhCanHos &&
@@ -94,12 +101,18 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 												className="rounded-3"
 												alt=""
 											></img>
-											<AiOutlineArrowRight
+											<div
 												className="text-light fs-1 my-auto ms-4"
-												onClick={
-													rightArrowClick
-												}
-											/>
+												style={{
+													cursor: "pointer",
+												}}
+											>
+												<AiOutlineArrowRight
+													onClick={
+														rightArrowClick
+													}
+												/>
+											</div>
 										</div>
 									</div>
 									<div className="row d-flex flex-wrap justify-content-start ms-2 my-3">
@@ -517,10 +530,16 @@ const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
 																				);
 																			}
 																		)}
-																		<Button className="fw-bold btn_price">
-																			Đặt
-																			ngay
-																		</Button>
+																		<Link
+																			to={`/${canho.maCanHo}/booking`}
+																			className="text-decoration-none text-light fw-bold btn_price"
+																		>
+																			<Button className="fw-bold btn_price">
+																				{" "}
+																				Đặt
+																				ngay
+																			</Button>
+																		</Link>
 																	</div>
 																</div>
 															</>
