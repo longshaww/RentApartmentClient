@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import Icon from '../../../components/Icon';
 import {
 	Card,
@@ -12,20 +12,201 @@ import {
 	PopoverBody,
 	PopoverHeader,
 	UncontrolledPopover,
+	Modal,
+	ModalBody,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import "../../../assets/css/link.scss";
 import dataCardRoom from "../../../assets/json/card-room";
 import { ReactComponent as Icon4 } from "../../../assets/svg/icon4.svg";
+import globalStateAndAction from "../../../container/global.state.action";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import axiosMethod from "../../../utils/api";
+import "../../../assets/css/apartment.detail.scss";
 
-const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
+const CardRoom: React.FC<{ detail: any }> = ({ detail }) => {
+	const [modal, setModal] = useState<any>(false);
+	const [idRoom, setIdRoom] = useState<string>("");
+	const [apartment, setApartment] = useState<any>({});
+	const [imgSlider, setImgSlider] = useState<number>(0);
+	// Toggle for Modal
+	const toggle = () => {
+		setModal(!modal);
+	};
+	useEffect(() => {
+		async function getData() {
+			const data = await axiosMethod(`apartment/${idRoom}`, "get");
+			setApartment(data);
+		}
+		getData();
+	}, [idRoom]);
+	const leftArrowClick = () => {
+		setImgSlider((prevState) =>
+			prevState > 1
+				? prevState - 1
+				: apartment.hinhAnhCanHos.length - 1
+		);
+	};
+	const rightArrowClick = () => {
+		setImgSlider((prevState) =>
+			prevState < apartment.hinhAnhCanHos.length - 1
+				? prevState + 1
+				: 0
+		);
+	};
 	return (
 		<>
 			<div>
-				{dataDetail.canHos &&
-					dataDetail.canHos.map((canho: any) => {
+				<Modal
+					size="xl"
+					isOpen={modal}
+					toggle={toggle}
+					centered={true}
+				>
+					<ModalBody className="p-0">
+						{apartment && (
+							<div className="row">
+								<div className="col bg-dark">
+									<div className="row">
+										<div className="img d-flex justify-content-center p-4">
+											<AiOutlineArrowLeft
+												className="text-light fs-1 my-auto me-4"
+												onClick={
+													leftArrowClick
+												}
+											/>
+											<img
+												src={
+													apartment.hinhAnhCanHos &&
+													apartment
+														.hinhAnhCanHos[
+														imgSlider
+													]
+														? apartment
+																.hinhAnhCanHos[
+																imgSlider
+														  ]
+																.urlImageCanHo
+														: "https://via.placeholder.com/350x250"
+												}
+												style={{
+													width: "80%",
+												}}
+												className="rounded-3"
+												alt=""
+											></img>
+											<AiOutlineArrowRight
+												className="text-light fs-1 my-auto ms-4"
+												onClick={
+													rightArrowClick
+												}
+											/>
+										</div>
+									</div>
+									<div className="row d-flex flex-wrap justify-content-start ms-2 my-3">
+										{apartment.hinhAnhCanHos &&
+											apartment.hinhAnhCanHos.map(
+												(
+													item: any,
+													index: number
+												) => {
+													return (
+														<>
+															<img
+																key={
+																	index
+																}
+																src={
+																	item.urlImageCanHo
+																}
+																alt=""
+																onClick={() =>
+																	setImgSlider(
+																		index
+																	)
+																}
+																className="img-slider-radius"
+																style={{
+																	width: "11rem",
+																	height: "7rem",
+																}}
+															></img>
+														</>
+													);
+												}
+											)}
+									</div>
+								</div>
+								<div className="col-3 h-100">
+									<div className="room-information py-3 border-bottom">
+										<div className="fw-bold">
+											Thông tin phòng
+										</div>
+										<ul>
+											<li>
+												{apartment.dienTich}
+											</li>
+											<li>
+												{
+													apartment.soLuongKhach
+												}{" "}
+												khách
+											</li>
+										</ul>
+									</div>
+
+									<div className="room-covenient py-3 border-bottom">
+										<div className="fw-bold">
+											Tiện nghi phòng
+										</div>
+										<ul>
+											{apartment.tienNghiCanHo &&
+												apartment.tienNghiCanHo.map(
+													(
+														item: any,
+														index: number
+													) => {
+														return (
+															<li
+																key={
+																	index
+																}
+															>
+																{
+																	item.TenTienNghiCanHo
+																}
+															</li>
+														);
+													}
+												)}
+										</ul>
+									</div>
+									<div className="price-modal p-3 mt-3 shadow-lg ">
+										<small>Khởi điểm từ:</small>
+										<div className="d-flex">
+											<div className="fw-bold text-danger fs-5">
+												{apartment.gia},000
+												VNĐ
+											</div>
+											<small className="mt-1">
+												/phòng/đêm
+											</small>
+										</div>
+										<button className="btn btn-primary mt-2">
+											Thêm lựa chọn phòng
+										</button>
+									</div>
+								</div>
+							</div>
+						)}
+					</ModalBody>
+				</Modal>
+				{detail.canHos &&
+					detail.canHos.map((canho: any, index: number) => {
 						return (
-							<Card className="shadow rounded mb-3 bg_card_room">
+							<Card
+								className="shadow rounded mb-3 bg_card_room"
+								key={index}
+							>
 								<CardBody>
 									<CardTitle tag="h5">
 										{canho.tenCanHo}
@@ -33,48 +214,57 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 									<Row>
 										<Col sm="4" className="pe-0">
 											<Card body>
-												{dataCardRoom.imgRoom.map(
-													(Title) => {
-														return (
-															<div className="">
-																<CardImg
-																	width="100%"
-																	alt=""
-																	src={
-																		Title.imgTitle
-																	}
-																/>
-																<div className="d-flex pt-1 slide-thumbs">
-																	{Title.imgItems.map(
-																		(
-																			item,
-																			i
-																		) => {
-																			return (
-																				<CardImg
-																					width="100%"
-																					src={
-																						item.img
-																					}
-																					alt=""
-																					className={
-																						i ===
-																						Title
-																							.imgItems
-																							.length -
-																							1
-																							? ""
-																							: "pe-1"
-																					}
-																				/>
-																			);
-																		}
-																	)}
-																</div>
-															</div>
-														);
-													}
-												)}
+												<div className="">
+													<CardImg
+														width="100%"
+														alt=""
+														src={
+															canho
+																.hinhAnhCanHos[0]
+																? canho
+																		.hinhAnhCanHos[0]
+																		?.urlImageCanHo
+																: "https://via.placeholder.com/350x250"
+														}
+													/>
+													<div className="d-flex pt-1 slide-thumbs">
+														{canho
+															.hinhAnhCanHos
+															.length >
+															0 &&
+															canho.hinhAnhCanHos.map(
+																(
+																	img: any,
+																	i: number
+																) => {
+																	return (
+																		<CardImg
+																			key={
+																				i
+																			}
+																			style={{
+																				width: "5rem",
+																			}}
+																			src={
+																				img.urlImageCanHo
+																			}
+																			alt=""
+																			className={
+																				i ===
+																				canho
+																					.hinhAnhCanHos
+																					.length -
+																					1
+																					? ""
+																					: "pe-1"
+																			}
+																		/>
+																	);
+																}
+															)}
+													</div>
+												</div>
+
 												<CardTitle
 													tag="h6"
 													className="pt-2"
@@ -89,10 +279,16 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 												<div className="d-inline-flex align-items-start flex-column">
 													{dataCardRoom.feature.map(
 														(
-															item
+															item,
+															index
 														) => {
 															return (
-																<CardText className=" rounded-pill px-3 type color_feature">
+																<CardText
+																	key={
+																		index
+																	}
+																	className=" rounded-pill px-3 type color_feature"
+																>
 																	<small className="">
 																		{
 																			item.text
@@ -104,13 +300,20 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 													)}
 												</div>
 
-												<Button className="mt-3 text-primary fw-bold btn_room_color link">
-													<Link
-														to={
+												<Button
+													className="mt-3 text-primary fw-bold btn_room_color link"
+													onClick={() => {
+														setModal(
+															!modal
+														);
+														setIdRoom(
 															canho.maCanHo
-														}
-														className="stretched-link"
-													></Link>
+														);
+														setImgSlider(
+															0
+														);
+													}}
+												>
 													Xem chi tiết
 													phòng
 												</Button>
@@ -124,10 +327,18 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 													}
 												</CardTitle>
 												{dataCardRoom.information.map(
-													(info) => {
+													(
+														info,
+														index
+													) => {
 														return (
 															<>
-																<div className="d-flex justify-content-between">
+																<div
+																	key={
+																		index
+																	}
+																	className="d-flex justify-content-between"
+																>
 																	<CardText className="">
 																		<img
 																			alt=""
@@ -135,10 +346,9 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 																			className="width_icon_room"
 																		/>
 																		<small className="ps-1 me-5">
-																			1
-																			Giường
-																			Cỡ
-																			Queen
+																			{
+																				canho.thongTinGiuong
+																			}
 																		</small>
 																	</CardText>
 																	<CardText className="">
@@ -170,10 +380,15 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 																	<div className="col-4">
 																		{info.convenient.map(
 																			(
-																				convenient
+																				convenient,
+																				index
 																			) => {
 																				return (
-																					<CardText>
+																					<CardText
+																						key={
+																							index
+																						}
+																					>
 																						<img
 																							src={
 																								convenient.icon2
@@ -194,10 +409,15 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 																	<div className="col-4">
 																		{info.policy.map(
 																			(
-																				policy
+																				policy,
+																				index
 																			) => {
 																				return (
-																					<CardText>
+																					<CardText
+																						key={
+																							index
+																						}
+																					>
 																						<img
 																							src={
 																								policy.icon3
@@ -218,11 +438,17 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 																	<div className="col-4 d-flex align-items-end flex-column">
 																		{info.price.map(
 																			(
-																				price
+																				price,
+																				index
 																			) => {
 																				return (
 																					<>
-																						<CardText className="m-0">
+																						<CardText
+																							key={
+																								index
+																							}
+																							className="m-0"
+																						>
 																							<small className="text-decoration-line-through">
 																								{
 																									price.cost
@@ -251,7 +477,6 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 																							id="UncontrolledPopover"
 																							type="button"
 																							data-bs-trigger="hover focus"
-																							tabindex="0"
 																							data-bs-toggle="popover"
 																						>
 																							<small>
@@ -313,4 +538,4 @@ const CardRoom: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 		</>
 	);
 };
-export default CardRoom;
+export default globalStateAndAction(CardRoom);

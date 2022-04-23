@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import Icon from "../../../components/Icon";
 import {
 	Card,
@@ -12,33 +12,31 @@ import {
 import { ReactComponent as IcStar } from "../../../assets/svg/star.svg";
 import { ReactComponent as IcLocal } from "../../../assets/svg/local.svg";
 import { ReactComponent as IcConvenient } from "../../../assets/svg/convenient.svg";
-
+import globalStateAndAction from "../../../container/global.state.action";
 import "../../../assets/css/detail.scss";
 import { Link } from "react-router-dom";
 
 import dataCardDetail from "../../../assets/json/card-detail";
 
-const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
-	if (dataDetail.length > 0) {
-		console.log(dataDetail);
-	}
+const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
+	const [imageIndex, setImageIndex] = useState<number>(0);
 	return (
 		<>
 			<Card className="shadow rounded mb-3">
 				<CardBody>
 					<CardTitle tag="h4" className="fw-bold">
-						{dataDetail.tenBct}
+						{detail.tenBct}
 					</CardTitle>
 					<CardSubtitle
 						className="mb-2 text-muted fw-bold"
 						tag="h6"
 					>
-						{dataDetail.tenBct}
+						{detail.tenBct}
 					</CardSubtitle>
 					<div className="col d-flex justify-content-start">
 						<CardText className="border border-info bg-info rounded-pill px-3 type">
 							<small className="text-white fw-bold text-uppercase">
-								{dataDetail.maLoaiLuuTru?.tenLoaiLuuTru}
+								{detail.maLoaiLuuTru?.tenLoaiLuuTru}
 							</small>
 						</CardText>
 						<div className="ms-2 width_icon">
@@ -50,7 +48,7 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 							<IcLocal />
 						</div>
 						<CardText className="fw-bold text-muted type">
-							{dataDetail.diaChi}
+							{detail.diaChi}
 						</CardText>
 					</div>
 					<hr />
@@ -58,8 +56,8 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 						<div className="col-10">
 							<img
 								src={
-									dataDetail.hinhAnhBcts &&
-									dataDetail.hinhAnhBcts[0]
+									detail.hinhAnhBcts &&
+									detail.hinhAnhBcts[imageIndex]
 										.urlImageBct
 								}
 								alt=""
@@ -68,12 +66,14 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 							></img>
 						</div>
 						<div className="col ps-1 slide-thumbs d-flex flex-column justify-content-between">
-							{dataDetail.hinhAnhBcts &&
-								dataDetail.hinhAnhBcts.map(
-									(item: any) => (
+							{detail.hinhAnhBcts &&
+								detail.hinhAnhBcts.map(
+									(item: any, index: number) => (
 										<CardImg
-											//   className={i === sliderDetailRight.length - 1 ? '' : 'pb-2'}
 											width="100%"
+											onClick={() =>
+												setImageIndex(index)
+											}
 											src={item.urlImageBct}
 										/>
 									)
@@ -89,11 +89,11 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 								<IcConvenient />
 							</div>
 							<CardText className="type text-info me-1 fw-bold">
-								Tiện lợi - 7.3
+								{detail.diemTienNghi} Tiện lợi
 							</CardText>
 						</h5>
 						<CardText>
-							đánh giá từ {dataDetail.luotDanhGia} du khách
+							đánh giá từ {detail.luotDanhGia} du khách
 						</CardText>
 					</div>
 					<div className="col-6 rigth">
@@ -103,7 +103,7 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 							</small>
 						</CardText>
 						<CardText className="size-color_price fw-bold">
-							{dataDetail.giaTrungBinh}.000 VND
+							{detail.giaTrungBinh}.000 VND
 						</CardText>
 						<Button className="fw-bold btn_price px-5">
 							Đặt ngay
@@ -112,7 +112,7 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 				</CardBody>
 				<CardBody className="ps-4">
 					<CardText tag="h5" className="mb-4">
-						Tiện nghi khách sạn
+						Tiện nghi căn hộ
 					</CardText>
 					<div className="d-flex justify-content-start pb-4">
 						{dataCardDetail.convenient.map((item) => {
@@ -140,4 +140,4 @@ const CardDetail: React.FC<{ dataDetail: any }> = ({ dataDetail }) => {
 		</>
 	);
 };
-export default CardDetail;
+export default globalStateAndAction(CardDetail);
