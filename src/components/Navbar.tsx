@@ -191,17 +191,26 @@ const NavbarApp: React.FC = () => {
 					</div>
 					<div className="bg_nav_2 d-flex ">
 						<div className="m-auto d-flex ">
-							{menu.map((dropdown) => {
+							{menu.map((dropdown, index) => {
 								return (
-									<UncontrolledDropdown className="px-4 py-1">
+									<UncontrolledDropdown
+										key={index}
+										className="px-4 py-1"
+									>
 										<DropdownToggle caret>
 											{dropdown.title}
 										</DropdownToggle>
 										<DropdownMenu className="">
 											{dropdown.children.map(
-												(dropdownItem) => {
+												(
+													dropdownItem,
+													index
+												) => {
 													return (
 														<DropdownItem
+															key={
+																index
+															}
 															href={
 																dropdownItem.href
 															}
