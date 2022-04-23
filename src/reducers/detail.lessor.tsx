@@ -1,9 +1,6 @@
 import { FETCHED_LESSOR } from "../constant/constant";
 // import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface DetailLessor {
-	lessor: Object;
-}
 const initialState = {
 	lessor: {},
 };

@@ -117,7 +117,13 @@ const CardHome: React.FC = () => {
 										tag="h5"
 										className="color-price fw-bold m-0 mb-0"
 									>
-										{item.giaTrungBinh}.000 VND
+										{item.giaTrungBinh
+											.toString()
+											.includes(".")
+											? item.giaTrungBinh +
+											  "00 VND"
+											: item.giaTrungBinh +
+											  ".000đ"}
 									</CardTitle>
 									<select
 										className="card-text form-select border-0"

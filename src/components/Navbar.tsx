@@ -110,17 +110,6 @@ const NavbarApp: React.FC = () => {
 								<Nav className="m-auto" navbar>
 									<NavItem>
 										<Link
-											to="/info"
-											className="nav-link"
-										>
-											{/* <Icon name="Icon1" /> */}
-											<span className="ps-1">
-												Info Customer
-											</span>
-										</Link>
-									</NavItem>
-									<NavItem>
-										<Link
 											to="/"
 											className="nav-link"
 										>
