@@ -18,25 +18,31 @@ import { Link } from "react-router-dom";
 
 import dataCardDetail from "../../../assets/json/card-detail";
 
-const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
+const CardDetail: React.FC<{
+	detailLessor: any;
+}> = ({ detailLessor }) => {
 	const [imageIndex, setImageIndex] = useState<number>(0);
+
 	return (
 		<>
 			<Card className="shadow rounded mb-3">
 				<CardBody>
 					<CardTitle tag="h4" className="fw-bold">
-						{detail.tenBct}
+						{detailLessor.tenBct}
 					</CardTitle>
 					<CardSubtitle
 						className="mb-2 text-muted fw-bold"
 						tag="h6"
 					>
-						{detail.tenBct}
+						{detailLessor.tenBct}
 					</CardSubtitle>
 					<div className="col d-flex justify-content-start">
 						<CardText className="border border-info bg-info rounded-pill px-3 type">
 							<small className="text-white fw-bold text-uppercase">
-								{detail.maLoaiLuuTru?.tenLoaiLuuTru}
+								{
+									detailLessor.maLoaiLuuTru
+										?.tenLoaiLuuTru
+								}
 							</small>
 						</CardText>
 						<div className="ms-2 width_icon">
@@ -48,7 +54,7 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 							<IcLocal />
 						</div>
 						<CardText className="fw-bold text-muted type">
-							{detail.diaChi}
+							{detailLessor.diaChi}
 						</CardText>
 					</div>
 					<hr />
@@ -56,9 +62,10 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 						<div className="col-10">
 							<img
 								src={
-									detail.hinhAnhBcts &&
-									detail.hinhAnhBcts[imageIndex]
-										.urlImageBct
+									detailLessor.hinhAnhBcts &&
+									detailLessor.hinhAnhBcts[
+										imageIndex
+									].urlImageBct
 								}
 								alt=""
 								style={{ width: "100%" }}
@@ -66,8 +73,8 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 							></img>
 						</div>
 						<div className="col ps-1 slide-thumbs d-flex flex-column justify-content-between">
-							{detail.hinhAnhBcts &&
-								detail.hinhAnhBcts.map(
+							{detailLessor.hinhAnhBcts &&
+								detailLessor.hinhAnhBcts.map(
 									(item: any, index: number) => (
 										<CardImg
 											width="100%"
@@ -89,11 +96,12 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 								<IcConvenient />
 							</div>
 							<CardText className="type text-info me-1 fw-bold">
-								{detail.diemTienNghi} Tiện lợi
+								{detailLessor.diemTienLoi} Tiện lợi
 							</CardText>
 						</h5>
 						<CardText>
-							đánh giá từ {detail.luotDanhGia} du khách
+							đánh giá từ {detailLessor.luotDanhGia} du
+							khách
 						</CardText>
 					</div>
 					<div className="col-6 rigth">
@@ -103,7 +111,7 @@ const CardDetail: React.FC<{ detail: any }> = ({ detail }) => {
 							</small>
 						</CardText>
 						<CardText className="size-color_price fw-bold">
-							{detail.giaTrungBinh}.000 VND
+							{detailLessor.giaTrungBinh}.000 VND
 						</CardText>
 						<Button className="fw-bold btn_price px-5">
 							Đặt ngay
