@@ -1,11 +1,14 @@
 import { BsSearch } from "react-icons/bs";
 import "../../../assets/css/app.scss";
-import * as React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/lab";
+import globalStateAndAction from "../../../container/global.state.action";
+import axiosMethod from "../../../utils/api";
 import moment from "moment";
+import { useSearchParams } from "react-router-dom";
 
 import {
 	FormControl,
@@ -16,14 +19,42 @@ import {
 	Box,
 } from "@mui/material";
 
-const Search: React.FC = () => {
-	const [address, setAddress] = React.useState("");
-	const [checkInDate, setCheckInDate] = React.useState<Date | null>(null);
-	const [nightCount, setNightCount] = React.useState("");
+const Search: React.FC<{
+	setListLessor: any;
+	checkInDate: any;
+	checkOutDate: any;
+	setCheckInDate: any;
+	setCheckOutDate: any;
+}> = ({
+	setListLessor,
+	checkInDate,
+	setCheckInDate,
+	checkOutDate,
+	setCheckOutDate,
+}) => {
+	let [searchParams, setSearchParams] = useSearchParams();
+	const [searchInput, setSearchInput] = useState("");
+	const [nightCount, setNightCount] = useState<string>("1");
 
-	// moment(checkInDate).format("DD/MM/YYYY");
-	const handleChange = (event: SelectChangeEvent) => {
+	const handleChangeNightCount = (event: SelectChangeEvent) => {
 		setNightCount(event.target.value as string);
+		setCheckOutDate(
+			moment(checkInDate).add(event.target.value, "days").format("LL")
+		);
+	};
+
+	const handleChangeCheckInDate = (newValue: any) => {
+		setCheckInDate(newValue);
+		setCheckOutDate(
+			moment(newValue).add(nightCount, "days").format("LL")
+		);
+	};
+
+	const sendQuery = async () => {
+		if (!searchInput) return;
+		setSearchParams(`tenBct=${searchInput}`);
+		const data = await axiosMethod(`lessor?tenBct=${searchInput}`, "get");
+		setListLessor(data);
 	};
 
 	return (
@@ -34,8 +65,8 @@ const Search: React.FC = () => {
 						id="outlined-basic"
 						label="Thành phố, địa điểm hoặc tên khách sạn"
 						variant="outlined"
-						value={address}
-						onChange={(e) => setAddress(e.target.value)}
+						value={searchInput}
+						onChange={(e) => setSearchInput(e.target.value)}
 					/>
 				</div>
 				<div className="row mt-4 w-75 m-auto">
@@ -45,9 +76,7 @@ const Search: React.FC = () => {
 								label="Nhận phòng"
 								inputFormat="DD/MM/YYYY"
 								value={checkInDate}
-								onChange={(newValue) => {
-									setCheckInDate(newValue);
-								}}
+								onChange={handleChangeCheckInDate}
 								renderInput={(params) => (
 									<TextField {...params} />
 								)}
@@ -65,7 +94,7 @@ const Search: React.FC = () => {
 									id="demo-simple-select"
 									value={nightCount}
 									label="Age"
-									onChange={handleChange}
+									onChange={handleChangeNightCount}
 								>
 									<MenuItem value={1}>
 										1 đêm
@@ -85,10 +114,13 @@ const Search: React.FC = () => {
 					</div>
 					<div className="col">
 						<label className="fw-bold">Trả phòng</label>
-						<div>Thứ 3, 26 thg 4 2022</div>
+						<div>{checkOutDate}</div>
 					</div>
 					<div className="col">
-						<button className="btn btn-primary p-3">
+						<button
+							className="btn btn-primary p-3"
+							onClick={sendQuery}
+						>
 							<BsSearch />
 							Tìm khách sạn
 						</button>
@@ -98,4 +130,4 @@ const Search: React.FC = () => {
 		</>
 	);
 };
-export default Search;
+export default globalStateAndAction(Search);
