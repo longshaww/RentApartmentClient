@@ -138,7 +138,7 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 												? item.giaTrungBinh +
 												  "00 VND"
 												: item.giaTrungBinh +
-												  ".000đ"}
+												  ".000 VNĐ"}
 										</CardTitle>
 										<select
 											className="card-text form-select border-0"
