@@ -3,11 +3,7 @@ import { Col, Container, Row } from "reactstrap";
 import "../../../assets/css/info.scss";
 import "../../../assets/css/card.scss";
 import Preferential from "../components/Preferential";
-import YourInfo from "../components/YourInfo";
-import Requirement from "../components/Requirement";
-import PolycyCancel from "../components/PolicyCancel";
-import PriceDetails from "../components/PriceDetails";
-import ConfirmButton from "../components/ConfirmButton";
+import InformationForm from "../components/information.form";
 import TitleInfo from "../components/TitleInfo";
 import RoomInfo from "../components/RoomInfo";
 
@@ -28,11 +24,7 @@ const Booking: React.FC = () => {
 						}}
 					>
 						<Preferential />
-						<YourInfo />
-						<Requirement />
-						<PolycyCancel />
-						<PriceDetails />
-						<ConfirmButton />
+						<InformationForm />
 					</Col>
 					<Col
 						sm={{
