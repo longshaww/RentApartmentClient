@@ -6,6 +6,7 @@ import CardRoom from "../components/CardRoom";
 import Convenient from "../components/Convenient";
 import axiosMethod from "../../../utils/api";
 import globalStateAndAction from "../../../container/global.state.action";
+import { motion } from "framer-motion";
 
 // import CardLocation from 'src/components/CardLocation';
 
@@ -21,14 +22,20 @@ const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
 	}, [id, setDetailLessor]);
 
 	return (
-		<Container className="pt-5">
-			<Container fluid="md">
-				<CardDetail />
-				{/* <CardLocation /> */}
-				<CardRoom />
-				<Convenient />
+		<motion.div
+			initial={{ width: 0 }}
+			animate={{ width: "100%" }}
+			exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+		>
+			<Container className="pt-5">
+				<Container fluid="md">
+					<CardDetail />
+					{/* <CardLocation /> */}
+					<CardRoom />
+					<Convenient />
+				</Container>
 			</Container>
-		</Container>
+		</motion.div>
 	);
 };
 
