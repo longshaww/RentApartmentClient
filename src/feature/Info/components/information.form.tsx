@@ -118,27 +118,27 @@ const InformationForm: React.FC<{
 			didOpen: () => {
 				// `MySwal` is a subclass of `Swal` with all the same instance & static methods
 				MySwal.showLoading();
-			},
-		})
-			.then(() => {
 				sendReq(data);
-			})
-			.then(() => {
+			},
+			timer: 1000,
+		}).then(() => {
+			return MySwal.fire({
+				title: "Thành công",
+				icon: "success",
+				didOpen: () => {
+					MySwal.showLoading();
+				},
+				timer: 1000,
+			}).then(() => {
 				return MySwal.fire({
-					title: "Thành công",
-					icon: "success",
+					title: "Chuyển đến trang thanh toán",
 					didOpen: () => {
 						MySwal.showLoading();
 					},
-				}).then(() => {
-					return MySwal.fire({
-						title: "Chuyển đến trang thanh toán",
-						didOpen: () => {
-							MySwal.showLoading();
-						},
-					});
+					timer: 1000,
 				});
 			});
+		});
 	};
 
 	return (
