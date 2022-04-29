@@ -30,7 +30,6 @@ const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
 			<Container className="pt-5">
 				<Container fluid="md">
 					<CardDetail />
-					{/* <CardLocation /> */}
 					<CardRoom />
 					<Convenient />
 				</Container>
