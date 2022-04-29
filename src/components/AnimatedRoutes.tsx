@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Detail from "../feature/Detail/pages/Detail";
 import Home from "../feature/Home/pages/Home";
 import Booking from "../feature/Info/pages/booking";

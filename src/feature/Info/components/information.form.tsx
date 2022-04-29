@@ -12,6 +12,7 @@ import {
 	Container,
 	CardSubtitle,
 	Button,
+	FormFeedback,
 } from "reactstrap";
 import globalStateAndAction from "../../../container/global.state.action";
 import axiosMethod from "../../../utils/api";
@@ -24,8 +25,12 @@ const InformationForm: React.FC<{
 	checkOutDate: any;
 }> = ({ detailApartment, checkInDate, checkOutDate }) => {
 	//Info handling
-	const [inputs, setInputs] = useState<any>({});
-
+	const [inputs, setInputs] = useState<any>({ ten: "", sdt: "", email: "" });
+	const [errors, setErrors] = useState<any>({
+		ten: false,
+		sdt: false,
+		email: false,
+	});
 	const handleChange = (event: any) => {
 		const name = event.target.name;
 		const value = event.target.value;
@@ -82,8 +87,7 @@ const InformationForm: React.FC<{
 
 	const sendReq = useCallback((data?: any) => {
 		async function sendData() {
-			const req = await axiosMethod("bill", "post", data);
-			console.log(req);
+			await axiosMethod("bill", "post", data);
 		}
 		sendData();
 	}, []);
@@ -96,8 +100,17 @@ const InformationForm: React.FC<{
 		sendReq();
 	}, [sendReq]);
 
+	//Handle Submit
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
+		if (!inputs.ten || !inputs.email || !inputs.sdt) {
+			setErrors({ ...errors, ten: true, email: true, sdt: true });
+			return MySwal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "Vui lòng kiểm tra lại thông tin !",
+			});
+		}
 		const data = {
 			...inputs,
 			yeuCau: stringCheckbox,
@@ -116,7 +129,6 @@ const InformationForm: React.FC<{
 		MySwal.fire({
 			title: <p>Đang xử lý</p>,
 			didOpen: () => {
-				// `MySwal` is a subclass of `Swal` with all the same instance & static methods
 				MySwal.showLoading();
 				sendReq(data);
 			},
@@ -153,9 +165,14 @@ const InformationForm: React.FC<{
 							</CardTitle>
 							<Input
 								name="ten"
-								value={inputs.ten || ""}
+								className={inputs.ten && "is-valid"}
+								invalid={errors.ten}
+								value={inputs.ten}
 								onChange={handleChange}
 							/>
+							<FormFeedback invalid>
+								Bạn cần phải nhập tên !
+							</FormFeedback>
 							<CardText>
 								<small className="text-muted">
 									*Nhập tên như trên CMND/hộ chiếu
@@ -195,17 +212,23 @@ const InformationForm: React.FC<{
 										</Col>
 										<Col xs="7">
 											<Input
+												invalid={errors.sdt}
 												name="sdt"
-												value={
-													inputs.sdt ||
-													""
+												className={
+													inputs.sdt &&
+													"is-valid"
 												}
+												value={inputs.sdt}
 												onChange={
 													handleChange
 												}
 												placeholder=""
 												type="text"
 											/>
+											<FormFeedback invalid>
+												Bạn cần phải nhập
+												sđt !
+											</FormFeedback>
 										</Col>
 									</Row>
 								</FormGroup>
@@ -221,10 +244,18 @@ const InformationForm: React.FC<{
 									<Input
 										name="email"
 										onChange={handleChange}
-										value={inputs.email || ""}
+										value={inputs.email}
+										invalid={errors.email}
+										className={
+											inputs.email &&
+											"is-valid"
+										}
 										placeholder="VD: email@example.com"
 										type="email"
 									/>
+									<FormFeedback invalid>
+										Bạn cần phải nhập email !
+									</FormFeedback>
 								</FormGroup>
 							</Col>
 						</Row>
