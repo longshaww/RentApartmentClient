@@ -12,7 +12,7 @@ const TitleReview: React.FC = () => {
             <div className="title_info mb-5">
                 <h4 className="mb-3 fw-bold">Bạn vui lòng kiểm tra lại đặt chỗ</h4>
                 <h6 className="text-muted">
-                    Vui lòng xem lại chi tiết đặt phòng của bạn trước khi tiếp tục đến bước thanh toán
+                    Vui lòng xem lại chi tiết đặt phòng của bạn trước khi tiếp tục đến bước thanh toán.
                 </h6>
             </div>
         </Col>
