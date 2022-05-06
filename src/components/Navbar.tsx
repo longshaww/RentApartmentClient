@@ -185,6 +185,26 @@ const NavbarApp: React.FC = () => {
 											</DropdownMenu>
 										</UncontrolledDropdown>
 									</NavItem>
+									<NavItem>
+										<Link
+											to="/review"
+											className="nav-link"
+										>
+											<span className="ps-1">
+												review
+											</span>
+										</Link>
+									</NavItem>
+									<NavItem>
+										<Link
+											to="/payments"
+											className="nav-link"
+										>
+											<span className="ps-1">
+												payments
+											</span>
+										</Link>
+									</NavItem>
 								</Nav>
 							</Collapse>
 						</Navbar>

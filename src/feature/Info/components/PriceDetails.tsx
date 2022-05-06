@@ -13,7 +13,7 @@ const PriceDetails: React.FC = () => {
 	return (
 		<>
 			<div className="price_details mb-5">
-				<div className="mb-3 fw-bold">Chi tiết giá</div>
+				<h5 className="mb-3 fw-bold">Chi tiết giá</h5>
 				<Card className="shadow">
 					<CardTitle
 						tag="h6"
@@ -26,13 +26,13 @@ const PriceDetails: React.FC = () => {
 								: thanhTien + ".000 VNĐ"}
 						</CardText>
 					</CardTitle>
-					<hr />
+					<hr className="border border-2" />
 					<CardTitle className="p-3 d-flex justify-content-between m-0">
 						<CardText className="m-0">
 							(1x) {apartmentInfoPrice.tenCanHo} (1 đêm)
 						</CardText>
 						<CardText>
-							{apartmentInfoPrice.gia},000 VNĐ
+							{apartmentInfoPrice.gia}.000 VNĐ
 						</CardText>
 					</CardTitle>
 					<CardTitle className="p-3 d-flex justify-content-between m-0">

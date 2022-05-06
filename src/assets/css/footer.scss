@@ -1,0 +1,39 @@
+.bg-footer {
+    background-color: black !important;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+button.btn.btn-outline-light:hover {
+    color: #fff;
+    background-color: transparent;
+}
+
+.btn {
+    border-radius: 0.35rem;
+    border: 2px solid #fff;
+    &:hover {
+        color: none;
+    }
+}
+
+.size-card {
+    width: 64px;
+    height: 48px;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 0.35rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.text-list {
+    text-decoration: none;
+    color: #6c757d;
+    &:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+}

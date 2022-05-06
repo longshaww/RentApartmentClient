@@ -13,7 +13,7 @@ const PolycyCancel: React.FC = () => {
 					>
 						Chính sách hủy đặt phòng
 					</CardTitle>
-					<hr />
+					<hr className="border border-2" />
 					<CardSubtitle className="text-muted px-3 pb-3">
 						Đặt phòng này không được hoàn tiền.
 					</CardSubtitle>
