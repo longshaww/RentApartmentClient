@@ -111,7 +111,13 @@ const CardDetail: React.FC<{
 							</small>
 						</CardText>
 						<CardText className="size-color_price fw-bold">
-							{detailLessor.giaTrungBinh}.000 VND
+							{detailLessor.giaTrungBinh &&
+							detailLessor.giaTrungBinh
+								.toString()
+								.includes(".")
+								? detailLessor.giaTrungBinh + "00 VNĐ"
+								: detailLessor.giaTrungBinh +
+								  ".000 VNĐ"}
 						</CardText>
 						<Button className="fw-bold btn_price px-5">
 							Đặt ngay
