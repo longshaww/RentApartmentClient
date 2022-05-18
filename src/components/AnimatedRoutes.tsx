@@ -6,6 +6,8 @@ import Detail from "../feature/Detail/pages/Detail";
 import Home from "../feature/Home/pages/Home";
 import Booking from "../feature/Info/pages/booking";
 import Layout from "../layout/Layout";
+import Review from "../feature/Review/pages/review";
+import Payments from "../feature/Payment/pages/payments";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
@@ -21,6 +23,8 @@ const AnimatedRoute: React.FC = () => {
 							element={<Booking />}
 						/>
 						<Route index element={<Home />} />
+						<Route path="/test/payment" element={<Payments />}></Route>
+						<Route path="/test/review" element={<Review />}></Route>
 					</Route>
 				</Routes>
 			</AnimatePresence>
