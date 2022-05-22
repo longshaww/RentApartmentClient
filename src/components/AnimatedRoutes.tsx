@@ -23,8 +23,14 @@ const AnimatedRoute: React.FC = () => {
 							element={<Booking />}
 						/>
 						<Route index element={<Home />} />
-						<Route path="/test/payment" element={<Payments />}></Route>
-						<Route path="/test/review" element={<Review />}></Route>
+						<Route
+							path="/:id/booking/payment"
+							element={<Payments />}
+						></Route>
+						<Route
+							path="/test/review"
+							element={<Review />}
+						></Route>
 					</Route>
 				</Routes>
 			</AnimatePresence>

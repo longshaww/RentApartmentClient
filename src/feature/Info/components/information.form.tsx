@@ -18,12 +18,14 @@ import globalStateAndAction from "../../../container/global.state.action";
 import axiosMethod from "../../../utils/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useNavigate } from "react-router-dom";
 
 const InformationForm: React.FC<{
 	detailApartment: any;
 	checkInDate: any;
 	checkOutDate: any;
 }> = ({ detailApartment, checkInDate, checkOutDate }) => {
+	const navigate = useNavigate();
 	//Info handling
 	const [inputs, setInputs] = useState<any>({ ten: "", sdt: "", email: "" });
 	const [errors, setErrors] = useState<any>({
@@ -130,7 +132,11 @@ const InformationForm: React.FC<{
 			title: <p>Đang xử lý</p>,
 			didOpen: () => {
 				MySwal.showLoading();
-				sendReq(data);
+				// sendReq(data);
+				localStorage.setItem(
+					"user_info_payment",
+					JSON.stringify(data)
+				);
 			},
 			timer: 1000,
 		}).then(() => {
@@ -141,15 +147,19 @@ const InformationForm: React.FC<{
 					MySwal.showLoading();
 				},
 				timer: 1000,
-			}).then(() => {
-				return MySwal.fire({
-					title: "Chuyển đến trang thanh toán",
-					didOpen: () => {
-						MySwal.showLoading();
-					},
-					timer: 1000,
+			})
+				.then(() => {
+					return MySwal.fire({
+						title: "Chuyển đến trang thanh toán",
+						didOpen: () => {
+							MySwal.showLoading();
+						},
+						timer: 1000,
+					});
+				})
+				.then(() => {
+					navigate(`payment`);
 				});
-			});
 		});
 	};
 
