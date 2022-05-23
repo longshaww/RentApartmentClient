@@ -6,9 +6,11 @@ import Detail from "../feature/Detail/pages/Detail";
 import Home from "../feature/Home/pages/Home";
 import Booking from "../feature/Info/pages/booking";
 import Layout from "../layout/Layout";
-import Review from "../feature/Review/pages/review";
 import Payments from "../feature/Payment/pages/payments";
 import PaymentSuccess from "../feature/Payment/pages/success";
+import UserMe from "../feature/Me/pages/me";
+import NewApartment from "../feature/Admin/pages/NewApartment";
+import NewLessor from "../feature/Admin/pages/NewLessor";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
@@ -27,11 +29,17 @@ const AnimatedRoute: React.FC = () => {
 						<Route
 							path="/:id/booking/payment"
 							element={<Payments />}
-						></Route>
+						/>
 						<Route
 							path="/:id/booking/payment/success"
 							element={<PaymentSuccess />}
-						></Route>
+						/>
+						<Route path="me" element={<UserMe />} />
+						<Route path="newLessor" element={<NewLessor />} />
+						<Route
+							path="newLessor/newApartment"
+							element={<NewApartment />}
+						/>
 					</Route>
 				</Routes>
 			</AnimatePresence>

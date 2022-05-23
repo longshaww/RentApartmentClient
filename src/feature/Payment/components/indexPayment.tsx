@@ -35,7 +35,7 @@ export default function OnlinePayment() {
 			setClientSecret(data);
 		}
 		getClientSecret();
-	}, []);
+	}, [customer.tongTien, id, navigate]);
 
 	const appearance: Appearance = {
 		theme: "stripe",

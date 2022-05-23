@@ -21,6 +21,14 @@ import { ReactComponent as Icon3 } from "../assets/svg/icon3.svg";
 const NavbarApp: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toggle = () => setIsOpen(!isOpen);
+	const userMe = JSON.parse(localStorage.getItem("user_me") || "{}");
+	const onLogOutClick = () => {
+		const { REACT_APP_LOGIN_URL } = process.env;
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("user_me");
+		window.location.href = `${REACT_APP_LOGIN_URL}http://localhost:3000/me`;
+	};
+
 	const menu = [
 		{
 			title: "Vận chuyển",
@@ -185,6 +193,26 @@ const NavbarApp: React.FC = () => {
 											</DropdownMenu>
 										</UncontrolledDropdown>
 									</NavItem>
+									{userMe.name && (
+										<>
+											<NavItem>
+												<span className="nav-link fw-bold btn">
+													{userMe.name}
+												</span>
+											</NavItem>
+
+											<NavItem>
+												<span
+													className="nav-link fw-bold btn"
+													onClick={
+														onLogOutClick
+													}
+												>
+													Log out
+												</span>
+											</NavItem>
+										</>
+									)}
 								</Nav>
 							</Collapse>
 						</Navbar>

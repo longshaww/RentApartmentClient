@@ -15,7 +15,7 @@ const App: React.FC = () => {
 			{loading ? (
 				<div className="App">
 					<header className="App-header">
-						<img src={logo} className="App-logo"></img>
+						<img src={logo} className="App-logo" alt=""></img>
 						<p className="mt-5 text-info fs-1">
 							<em>Traveloka</em>
 						</p>

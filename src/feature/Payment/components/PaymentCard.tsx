@@ -1,6 +1,4 @@
 import React from "react";
-import { Row, Col } from "reactstrap";
-import FormCard from "../components/FormCard";
 import DetailPricePay from "../components/DetailPricePay";
 import ConfirmButtonPay from "../components/ConfirmButtonPay";
 import InstallmentVoucher from "../components/InstallmentVoucher";
