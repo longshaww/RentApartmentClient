@@ -8,6 +8,7 @@ import Booking from "../feature/Info/pages/booking";
 import Layout from "../layout/Layout";
 import Review from "../feature/Review/pages/review";
 import Payments from "../feature/Payment/pages/payments";
+import PaymentSuccess from "../feature/Payment/pages/success";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
@@ -28,8 +29,8 @@ const AnimatedRoute: React.FC = () => {
 							element={<Payments />}
 						></Route>
 						<Route
-							path="/test/review"
-							element={<Review />}
+							path="/:id/booking/payment/success"
+							element={<PaymentSuccess />}
 						></Route>
 					</Route>
 				</Routes>

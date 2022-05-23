@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
 	Card,
 	Form,
@@ -15,7 +15,6 @@ import {
 	FormFeedback,
 } from "reactstrap";
 import globalStateAndAction from "../../../container/global.state.action";
-import axiosMethod from "../../../utils/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useNavigate } from "react-router-dom";
@@ -84,23 +83,7 @@ const InformationForm: React.FC<{
 	let thanhTien = gia + tienThue;
 
 	//form Submit
-	const firstUpdate = useRef(true);
 	const MySwal = withReactContent(Swal);
-
-	const sendReq = useCallback((data?: any) => {
-		async function sendData() {
-			await axiosMethod("bill", "post", data);
-		}
-		sendData();
-	}, []);
-
-	useLayoutEffect(() => {
-		if (firstUpdate) {
-			firstUpdate.current = false;
-			return;
-		}
-		sendReq();
-	}, [sendReq]);
 
 	//Handle Submit
 	const handleSubmit = (e: any) => {
