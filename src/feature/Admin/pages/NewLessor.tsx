@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
 	Breadcrumb,
@@ -23,6 +25,29 @@ import {
 //   "diemTienNghi": 0
 // }
 const NewLessor: React.FC = () => {
+	const [inputs, setInputs] = useState({});
+	const [file, setFile] = useState<any>([]);
+	const handleFileChanges = (e: any) => {
+		setFile(e.target.files);
+	};
+
+	const handleInputChange = (event: any) => {
+		const name = event.target.name;
+		const value = event.target.value;
+		setInputs((values) => ({ ...values, [name]: value }));
+	};
+	console.log(file);
+
+	const handleSubmitNewLessor = (e: any) => {
+		e.preventDefault();
+		console.log(inputs);
+		const formData = new FormData();
+		for (let i = 0; i < file.length; i++) {
+			formData.append("hinhAnhBcts", file[i]);
+		}
+		console.log(formData);
+		// axios.post("http://localhost:4001/lessor/upload", formData);
+	};
 	return (
 		<Container className="my-5">
 			<Breadcrumb>
@@ -34,24 +59,34 @@ const NewLessor: React.FC = () => {
 					Xác nhận với các điều khoản
 				</BreadcrumbItem>
 			</Breadcrumb>
-			<Form>
+			<Form onSubmit={handleSubmitNewLessor}>
 				<h2>Tạo bên cho thuê mới</h2>
 				<FormGroup>
 					<Label for="tenBct">Tên bên cho thuê</Label>
-					<Input id="tenBct" name="tenBct" type="text" />
-				</FormGroup>
-				<FormGroup>
-					<Label for="diaChi">Địa chỉ</Label>
-					<Input id="diaChi" name="diaChi" type="text" />
-				</FormGroup>
-				<FormGroup>
-					<Label for="giaTrungBinh">Giá trung bình</Label>
 					<Input
-						id="giaTrungBinh"
-						name="giaTrungBinh"
+						onChange={handleInputChange}
+						id="tenBct"
+						name="tenBct"
 						type="text"
 					/>
 				</FormGroup>
+				<FormGroup>
+					<Label for="diaChi">Địa chỉ</Label>
+					<Input
+						onChange={handleInputChange}
+						id="diaChi"
+						name="diaChi"
+						type="text"
+					/>
+				</FormGroup>
+				{/* <FormGroup>
+					<Label for="giaTrungBinh">Giá trung bình</Label>
+					<Input
+						onChange={handleInputChange}
+						name="giaTrungBinh"
+						type="text"
+					/>
+				</FormGroup> */}
 				{/* <FormGroup>
 					<Label for="soSao">Số sao</Label>
 					<Input id="soSao" name="soSao" type="text" />
@@ -66,15 +101,31 @@ const NewLessor: React.FC = () => {
 				</FormGroup> */}
 				<FormGroup>
 					<Label for="moTa">Mô tả</Label>
-					<Input id="moTa" name="moTa" type="text" />
+					<Input
+						onChange={handleInputChange}
+						id="moTa"
+						name="moTa"
+						type="text"
+					/>
 				</FormGroup>
 				<FormGroup>
 					<Label for="hinhAnh">Hình ảnh</Label>
-					<Input id="hinhAnh" name="hinhAnh" type="file" />
+					<Input
+						onChange={handleFileChanges}
+						id="hinhAnh"
+						name="hinhAnh"
+						type="file"
+						multiple
+					/>
 				</FormGroup>
 				<FormGroup>
 					<Label for="maLuuTru">Loại hình lưu trú</Label>
-					<Input id="maLuuTru" name="maLuuTru" type="select">
+					<Input
+						onChange={handleInputChange}
+						id="maLuuTru"
+						name="maLuuTru"
+						type="select"
+					>
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -91,13 +142,7 @@ const NewLessor: React.FC = () => {
 					/>
 				</FormGroup> */}
 				<div className="d-flex justify-content-center">
-					<Link
-						to="/newLessor/newApartment"
-						className="px-4 py-2 btn btn-primary"
-						type="submit"
-					>
-						Tiếp tục
-					</Link>
+					<Button color="primary">Tiep tuc</Button>
 				</div>
 			</Form>
 		</Container>
