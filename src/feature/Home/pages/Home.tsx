@@ -14,7 +14,6 @@ const Home: React.FC = () => {
 		window.location.href = `${process.env.REACT_APP_LOGIN_URL}http://localhost:3000/me`;
 	}
 
-	console.log(userMe);
 	return (
 		<motion.div
 			initial={{ width: 0 }}

@@ -25,7 +25,7 @@ import {
 //   "diemTienNghi": 0
 // }
 const NewLessor: React.FC = () => {
-	const [inputs, setInputs] = useState({});
+	const [inputs, setInputs] = useState<any>({});
 	const [file, setFile] = useState<any>([]);
 	const handleFileChanges = (e: any) => {
 		setFile(e.target.files);
@@ -34,19 +34,26 @@ const NewLessor: React.FC = () => {
 	const handleInputChange = (event: any) => {
 		const name = event.target.name;
 		const value = event.target.value;
-		setInputs((values) => ({ ...values, [name]: value }));
+		setInputs((values: any) => ({ ...values, [name]: value }));
 	};
-	console.log(file);
+	// console.log(file);
 
 	const handleSubmitNewLessor = (e: any) => {
 		e.preventDefault();
-		console.log(inputs);
+		// console.log(inputs);
 		const formData = new FormData();
 		for (let i = 0; i < file.length; i++) {
 			formData.append("hinhAnhBcts", file[i]);
 		}
-		console.log(formData);
-		// axios.post("http://localhost:4001/lessor/upload", formData);
+		for (const key in inputs) {
+			formData.append(key, inputs[key]);
+		}
+		for (var value of Array.from(formData.values())) {
+			console.log(value);
+		}
+
+		// console.log(formData);
+		axios.post("http://localhost:4001/lessor/", formData);
 	};
 	return (
 		<Container className="my-5">
