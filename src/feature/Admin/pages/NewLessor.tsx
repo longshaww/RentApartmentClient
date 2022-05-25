@@ -25,7 +25,12 @@ import {
 //   "diemTienNghi": 0
 // }
 const NewLessor: React.FC = () => {
-	const [inputs, setInputs] = useState<any>({});
+	const [inputs, setInputs] = useState<any>({
+		tenBct: "",
+		diaChi: "",
+		moTa: "",
+		maLuuTru: "",
+	});
 	const [file, setFile] = useState<any>([]);
 	const handleFileChanges = (e: any) => {
 		setFile(e.target.files);
@@ -53,7 +58,7 @@ const NewLessor: React.FC = () => {
 		}
 
 		// console.log(formData);
-		axios.post("http://localhost:4001/lessor/", formData);
+		// axios.post(`${process.env.REACT_APP_API_URL}lessor`, formData);
 	};
 	return (
 		<Container className="my-5">
@@ -133,11 +138,10 @@ const NewLessor: React.FC = () => {
 						name="maLuuTru"
 						type="select"
 					>
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
+						<option selected value="LLT1">
+							Căn hộ
+						</option>
+						<option value="LLT2">Villa</option>
 					</Input>
 				</FormGroup>
 				{/* <FormGroup>
