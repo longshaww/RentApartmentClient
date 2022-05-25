@@ -11,6 +11,7 @@ import {
 	Input,
 	Label,
 } from "reactstrap";
+import axiosMethod from "../../../utils/api";
 // {
 //   "tenBct": "string",
 //   "diaChi": "string",
@@ -58,7 +59,8 @@ const NewLessor: React.FC = () => {
 		}
 
 		// console.log(formData);
-		axios.post(`${process.env.REACT_APP_API_URL}lessor`, formData);
+		const data = await axiosMethod(`lessor`, "get", formData);
+		console.log(data);
 	};
 	return (
 		<Container className="my-5">

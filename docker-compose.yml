@@ -10,4 +10,4 @@ services:
                - ".:/app"
                - "/app/node_modules"
           ports:
-               - "6020:80"
+               - "4002:80"
