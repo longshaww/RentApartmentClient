@@ -26,7 +26,7 @@ const NavbarApp: React.FC = () => {
 		const { REACT_APP_LOGIN_URL } = process.env;
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("user_me");
-		window.location.href = `${REACT_APP_LOGIN_URL}http://localhost:3000/me`;
+		window.location.href = `${REACT_APP_LOGIN_URL}http:/${window.location.host}/me`;
 	};
 
 	const menu = [
