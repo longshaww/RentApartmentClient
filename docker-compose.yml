@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+     react-frontend:
+          container_name: apartment-villa-vy-03
+          build:
+               context: .
+               dockerfile: Dockerfile
+          volumes:
+               - ".:/app"
+               - "/app/node_modules"
+          ports:
+               - "6020:80"
