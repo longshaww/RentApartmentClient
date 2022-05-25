@@ -11,7 +11,7 @@ const Home: React.FC = () => {
 	const accessToken = localStorage.getItem("access_token");
 	const userMe = JSON.parse(localStorage.getItem("user_me") || "{}");
 	if (!accessToken) {
-		window.location.href = `${process.env.REACT_APP_LOGIN_URL}http://localhost:3000/me`;
+		window.location.href = `${process.env.REACT_APP_LOGIN_URL}http://${window.location.host}/me`;
 	}
 
 	return (

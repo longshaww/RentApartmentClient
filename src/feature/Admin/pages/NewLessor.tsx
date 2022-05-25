@@ -11,7 +11,6 @@ import {
 	Input,
 	Label,
 } from "reactstrap";
-import axiosMethod from "../../../utils/api";
 // {
 //   "tenBct": "string",
 //   "diaChi": "string",
@@ -44,7 +43,7 @@ const NewLessor: React.FC = () => {
 	};
 	// console.log(file);
 
-	const handleSubmitNewLessor = async (e: any) => {
+	const handleSubmitNewLessor = (e: any) => {
 		e.preventDefault();
 		// console.log(inputs);
 		const formData = new FormData();
@@ -59,8 +58,7 @@ const NewLessor: React.FC = () => {
 		}
 
 		// console.log(formData);
-		const data = await axiosMethod(`lessor`, "get", formData);
-		console.log(data);
+		axios.post(`${process.env.REACT_APP_API_URL}lessor`, formData);
 	};
 	return (
 		<Container className="my-5">
@@ -155,7 +153,7 @@ const NewLessor: React.FC = () => {
 					/>
 				</FormGroup> */}
 				<div className="d-flex justify-content-center">
-					<Button color="primary">Tiếp tục</Button>
+					<Button color="primary">Tiep tuc</Button>
 				</div>
 			</Form>
 		</Container>

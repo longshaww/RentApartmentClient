@@ -14,7 +14,7 @@ export default async function axiosMethod(
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},
-		withCredentials: true,
+		// withCredentials: true,
 	});
 	const data = res.data;
 	return data;
