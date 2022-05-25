@@ -10,7 +10,7 @@ export default async function axiosMethod(
 	const res = await axios({
 		method: method,
 		data: body,
-		url: `${process.env.REACT_APP_API_URL}${endpoint}`,
+		url: `${process.env.REACT_APP_BE_URL}${endpoint}`,
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
 		},

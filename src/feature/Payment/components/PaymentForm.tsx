@@ -80,7 +80,7 @@ export default function PaymentForm() {
 			elements,
 			confirmParams: {
 				// Make sure to change this to your payment completion page
-				return_url: `${process.env.REACT_APP_FE_URL}${id}/booking/payment/success`,
+				return_url: `${window.location.host}${id}/booking/payment/success`,
 			},
 		});
 

@@ -1,6 +1,4 @@
-import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -11,25 +9,14 @@ import {
 	Input,
 	Label,
 } from "reactstrap";
-// {
-//   "tenBct": "string",
-//   "diaChi": "string",
-//   "giaTrungBinh": 0,
-//   "soSao": 0,
-//   "luotDanhGia": 0,
-//   "moTa": "string",
-//   "hinhAnh": [
-//     "string"
-//   ],
-//   "maLuuTru": "string",
-//   "diemTienNghi": 0
-// }
+import axiosMethod from "../../../utils/api";
+
 const NewLessor: React.FC = () => {
 	const [inputs, setInputs] = useState<any>({
 		tenBct: "",
 		diaChi: "",
 		moTa: "",
-		maLuuTru: "",
+		maLuuTru: "LLT1",
 	});
 	const [file, setFile] = useState<any>([]);
 	const handleFileChanges = (e: any) => {
@@ -43,7 +30,7 @@ const NewLessor: React.FC = () => {
 	};
 	// console.log(file);
 
-	const handleSubmitNewLessor = (e: any) => {
+	const handleSubmitNewLessor = async (e: any) => {
 		e.preventDefault();
 		// console.log(inputs);
 		const formData = new FormData();
@@ -53,12 +40,11 @@ const NewLessor: React.FC = () => {
 		for (const key in inputs) {
 			formData.append(key, inputs[key]);
 		}
-		for (var value of Array.from(formData.values())) {
-			console.log(value);
-		}
-
-		// console.log(formData);
-		axios.post(`${process.env.REACT_APP_API_URL}lessor`, formData);
+		// for (var value of Array.from(formData.values())) {
+		// 	console.log(value);
+		// }
+		const data = await axiosMethod("lessor", "post", formData);
+		console.log(data);
 	};
 	return (
 		<Container className="my-5">
@@ -80,6 +66,7 @@ const NewLessor: React.FC = () => {
 						id="tenBct"
 						name="tenBct"
 						type="text"
+						value={inputs.tenBct}
 					/>
 				</FormGroup>
 				<FormGroup>
@@ -89,6 +76,7 @@ const NewLessor: React.FC = () => {
 						id="diaChi"
 						name="diaChi"
 						type="text"
+						value={inputs.diaChi}
 					/>
 				</FormGroup>
 				{/* <FormGroup>
@@ -118,6 +106,7 @@ const NewLessor: React.FC = () => {
 						id="moTa"
 						name="moTa"
 						type="text"
+						value={inputs.moTa}
 					/>
 				</FormGroup>
 				<FormGroup>
@@ -125,7 +114,6 @@ const NewLessor: React.FC = () => {
 					<Input
 						onChange={handleFileChanges}
 						id="hinhAnh"
-						name="hinhAnh"
 						type="file"
 						multiple
 					/>
@@ -137,10 +125,9 @@ const NewLessor: React.FC = () => {
 						id="maLuuTru"
 						name="maLuuTru"
 						type="select"
+						value={inputs.maLuuTru}
 					>
-						<option selected value="LLT1">
-							Căn hộ
-						</option>
+						<option value="LLT1">Căn hộ</option>
 						<option value="LLT2">Villa</option>
 					</Input>
 				</FormGroup>

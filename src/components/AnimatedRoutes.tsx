@@ -37,7 +37,7 @@ const AnimatedRoute: React.FC = () => {
 						<Route path="me" element={<UserMe />} />
 						<Route path="newLessor" element={<NewLessor />} />
 						<Route
-							path="newLessor/:id/newApartment"
+							path="/:id/newApartment"
 							element={<NewApartment />}
 						/>
 					</Route>
