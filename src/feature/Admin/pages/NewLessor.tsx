@@ -11,14 +11,11 @@ import {
 	Input,
 	Label,
 } from "reactstrap";
-import withReactContent from "sweetalert2-react-content";
 import axiosMethod from "../../../utils/api";
-import Swal from "sweetalert2";
 import { Toast } from "../../../utils/toast.sweet-alert";
 
 const NewLessor: React.FC = () => {
 	const navigate = useNavigate();
-	const MySwal = withReactContent(Swal);
 
 	const [inputs, setInputs] = useState<any>({
 		tenBct: "",
@@ -45,7 +42,6 @@ const NewLessor: React.FC = () => {
 		const value = event.target.value;
 		setInputs((values: any) => ({ ...values, [name]: value }));
 	};
-	// console.log(file);
 
 	const handleSubmitNewLessor = async (e: any) => {
 		e.preventDefault();
@@ -74,11 +70,18 @@ const NewLessor: React.FC = () => {
 			formData.append(key, inputs[key]);
 		}
 
-		// const data = await axiosMethod("lessor", "post", formData);
-		// navigate(`/${data.maBct}`);
+		const res = await axiosMethod("lessor", "post", formData);
+		if (res.success) {
+			navigate(`/${res.body.maBct}`);
+			Toast.fire({
+				icon: "success",
+				title: "Success",
+			});
+			return;
+		}
 		Toast.fire({
-			icon: "success",
-			title: "Success",
+			icon: "error",
+			title: "Error",
 		});
 	};
 	return (

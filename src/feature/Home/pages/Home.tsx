@@ -3,7 +3,7 @@ import Filter from "../components/Filter";
 import Slider from "../components/Slider";
 import Search from "../components/Search";
 import CardHome from "../components/CardHome";
-import { Button, Container, Row } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 

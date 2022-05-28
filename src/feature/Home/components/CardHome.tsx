@@ -11,6 +11,7 @@ import "regenerator-runtime/runtime";
 import axiosMethod from "../../../utils/api";
 import { Card, CardBody, CardText, CardTitle } from "reactstrap";
 import Pagination from "../../../components/Pagination";
+import { checkImageString } from "../../../utils/check.image";
 
 const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 	listLessor,
@@ -47,10 +48,10 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 								>
 									<div className="col-md-4 ps-0">
 										<img
-											src={
+											src={checkImageString(
 												item.hinhAnhBcts[0]
 													.urlImageBct
-											}
+											)}
 											style={{
 												height: "100%",
 											}}

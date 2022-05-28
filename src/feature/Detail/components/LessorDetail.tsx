@@ -17,6 +17,7 @@ import "../../../assets/css/detail.scss";
 import { Link } from "react-router-dom";
 
 import dataCardDetail from "../../../assets/json/card-detail";
+import { checkImageString } from "../../../utils/check.image";
 
 const CardDetail: React.FC<{
 	detailLessor: any;
@@ -63,25 +64,29 @@ const CardDetail: React.FC<{
 							<img
 								src={
 									detailLessor.hinhAnhBcts &&
-									detailLessor.hinhAnhBcts[
-										imageIndex
-									].urlImageBct
+									checkImageString(
+										detailLessor.hinhAnhBcts[
+											imageIndex
+										].urlImageBct
+									)
 								}
 								alt=""
 								style={{ width: "100%" }}
 								className="img-fluid"
 							></img>
 						</div>
-						<div className="col ps-1 slide-thumbs d-flex flex-column justify-content-between">
+						<div className="col ps-1 slide-thumbs d-flex flex-column">
 							{detailLessor.hinhAnhBcts &&
 								detailLessor.hinhAnhBcts.map(
 									(item: any, index: number) => (
 										<CardImg
-											width="100%"
+											className="w-100 mb-2"
 											onClick={() =>
 												setImageIndex(index)
 											}
-											src={item.urlImageBct}
+											src={checkImageString(
+												item.urlImageBct
+											)}
 										/>
 									)
 								)}

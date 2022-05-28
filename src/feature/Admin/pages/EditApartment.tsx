@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-	Breadcrumb,
-	BreadcrumbItem,
 	Container,
 	Form,
 	FormFeedback,
@@ -13,21 +11,22 @@ import {
 import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
 
-const NewApartment: React.FC<any> = ({
-	setModal,
-	modal,
+const EditApartment: React.FC<any> = ({
+	idRoom,
 	listApartment,
 	setListApartment,
+	editApartmentModal,
+	setEditApartmentModal,
 }) => {
-	const params = useParams();
-	const { id }: any = params;
+	const thisApartment = listApartment.find((a: any) => a.maCanHo === idRoom);
 	const [inputs, setInputs] = useState<any>({
-		tenCanHo: "",
-		dienTich: "",
-		gia: "",
-		soLuongKhach: "1",
-		moTa: "",
-		thongTinGiuong: "1 Giường Queen",
+		tenCanHo: thisApartment.tenCanHo,
+		dienTich: thisApartment.dienTich,
+		gia: thisApartment.gia,
+		soLuongKhach: thisApartment.soLuongKhach,
+		moTa: thisApartment.moTa,
+		soLuongCon: thisApartment.soLuongCon,
+		thongTinGiuong: thisApartment.thongTinGiuong,
 	});
 
 	const [errors, setErrors] = useState({
@@ -56,6 +55,7 @@ const NewApartment: React.FC<any> = ({
 			!inputs.gia ||
 			isNaN(inputs.gia) ||
 			!inputs.moTa ||
+			!inputs.soLuongCon ||
 			file.length < 2 ||
 			file.length > 5
 		) {
@@ -76,17 +76,24 @@ const NewApartment: React.FC<any> = ({
 		for (const key in inputs) {
 			formData.append(key, inputs[key]);
 		}
-		formData.append("maBct", id);
+		formData.append("maBct", idRoom);
 
-		const data = await axiosMethod("apartment", "post", formData);
-		setModal(!modal);
+		const data = await axiosMethod(
+			`apartment/${idRoom}`,
+			"put",
+			formData
+		);
+		setEditApartmentModal(!editApartmentModal);
 
 		if (data.success) {
 			Toast.fire({
 				icon: "success",
 				title: "Success",
 			});
-			setListApartment([...listApartment, data.body]);
+			const index = listApartment.indexOf(thisApartment);
+			const newList = [...listApartment];
+			newList[index] = data.body;
+			setListApartment(newList);
 			return;
 		}
 		Toast.fire({
@@ -96,14 +103,6 @@ const NewApartment: React.FC<any> = ({
 	};
 	return (
 		<Container>
-			<Breadcrumb>
-				<BreadcrumbItem className="text-primary">
-					Tạo bên cho thuê
-				</BreadcrumbItem>
-				<BreadcrumbItem active>
-					Tạo căn phòng / villa
-				</BreadcrumbItem>
-			</Breadcrumb>
 			<Form
 				onSubmit={handleNewApartmentSubmit}
 				id="new-apartment-form"
@@ -195,6 +194,16 @@ const NewApartment: React.FC<any> = ({
 					</FormFeedback>
 				</FormGroup>
 				<FormGroup>
+					<Label for="soLuongCon">Số lượng còn</Label>
+					<Input
+						id="soLuongCon"
+						name="soLuongCon"
+						type="number"
+						onChange={handleInputChange}
+						value={inputs.soLuongCon}
+					/>
+				</FormGroup>
+				<FormGroup>
 					<Label for="thongTinGiuong">Thông tin giường</Label>
 					<Input
 						id="thongTinGiuong"
@@ -220,4 +229,4 @@ const NewApartment: React.FC<any> = ({
 	);
 };
 
-export default NewApartment;
+export default EditApartment;
