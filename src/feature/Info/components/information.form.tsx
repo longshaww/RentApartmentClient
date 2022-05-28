@@ -86,7 +86,7 @@ const InformationForm: React.FC<{
 	const MySwal = withReactContent(Swal);
 
 	//Handle Submit
-	const handleSubmit = (e: any) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		if (!inputs.ten || !inputs.email || !inputs.sdt) {
 			setErrors({ ...errors, ten: true, email: true, sdt: true });
@@ -111,7 +111,7 @@ const InformationForm: React.FC<{
 			thoiGianTra: checkOutDate,
 		};
 		// sendReq(data);
-		MySwal.fire({
+		await MySwal.fire({
 			title: <p>Đang xử lý</p>,
 			didOpen: () => {
 				MySwal.showLoading();
@@ -122,28 +122,24 @@ const InformationForm: React.FC<{
 				);
 			},
 			timer: 1000,
-		}).then(() => {
-			return MySwal.fire({
-				title: "Thành công",
-				icon: "success",
-				didOpen: () => {
-					MySwal.showLoading();
-				},
-				timer: 1000,
-			})
-				.then(() => {
-					return MySwal.fire({
-						title: "Chuyển đến trang thanh toán",
-						didOpen: () => {
-							MySwal.showLoading();
-						},
-						timer: 1000,
-					});
-				})
-				.then(() => {
-					navigate(`payment`);
-				});
 		});
+		await MySwal.fire({
+			title: "Thành công",
+			icon: "success",
+			didOpen: () => {
+				MySwal.showLoading();
+			},
+			timer: 1000,
+		});
+		await MySwal.fire({
+			title: "Chuyển đến trang thanh toán",
+			didOpen: () => {
+				MySwal.showLoading();
+			},
+			timer: 1000,
+		});
+
+		navigate(`payment`);
 	};
 
 	return (

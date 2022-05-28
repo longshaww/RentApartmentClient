@@ -1,22 +1,39 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
 	Button,
 	Container,
 	Form,
+	FormFeedback,
 	FormGroup,
 	Input,
 	Label,
 } from "reactstrap";
+import withReactContent from "sweetalert2-react-content";
 import axiosMethod from "../../../utils/api";
+import Swal from "sweetalert2";
+import { Toast } from "../../../utils/toast.sweet-alert";
 
 const NewLessor: React.FC = () => {
+	const navigate = useNavigate();
+	const MySwal = withReactContent(Swal);
+
 	const [inputs, setInputs] = useState<any>({
 		tenBct: "",
 		diaChi: "",
 		moTa: "",
 		maLuuTru: "LLT1",
+		privacy: false,
+	});
+
+	const [errors, setErrors] = useState({
+		tenBct: false,
+		diaChi: false,
+		moTa: false,
+		hinhAnh: false,
+		privacy: false,
 	});
 	const [file, setFile] = useState<any>([]);
 	const handleFileChanges = (e: any) => {
@@ -32,7 +49,23 @@ const NewLessor: React.FC = () => {
 
 	const handleSubmitNewLessor = async (e: any) => {
 		e.preventDefault();
-		// console.log(inputs);
+		if (
+			!inputs.tenBct ||
+			!inputs.diaChi ||
+			!inputs.moTa ||
+			!inputs.privacy ||
+			file.length < 2
+		) {
+			setErrors({
+				...errors,
+				tenBct: true,
+				diaChi: true,
+				moTa: true,
+				hinhAnh: true,
+				privacy: true,
+			});
+			return;
+		}
 		const formData = new FormData();
 		for (let i = 0; i < file.length; i++) {
 			formData.append("hinhAnhBcts", file[i]);
@@ -40,11 +73,13 @@ const NewLessor: React.FC = () => {
 		for (const key in inputs) {
 			formData.append(key, inputs[key]);
 		}
-		// for (var value of Array.from(formData.values())) {
-		// 	console.log(value);
-		// }
-		const data = await axiosMethod("lessor", "post", formData);
-		console.log(data);
+
+		// const data = await axiosMethod("lessor", "post", formData);
+		// navigate(`/${data.maBct}`);
+		Toast.fire({
+			icon: "success",
+			title: "Success",
+		});
 	};
 	return (
 		<Container className="my-5">
@@ -52,9 +87,6 @@ const NewLessor: React.FC = () => {
 				<BreadcrumbItem active>Tạo bên cho thuê</BreadcrumbItem>
 				<BreadcrumbItem className="text-primary">
 					Tạo căn phòng / villa
-				</BreadcrumbItem>
-				<BreadcrumbItem className="text-primary">
-					Xác nhận với các điều khoản
 				</BreadcrumbItem>
 			</Breadcrumb>
 			<Form onSubmit={handleSubmitNewLessor}>
@@ -66,8 +98,12 @@ const NewLessor: React.FC = () => {
 						id="tenBct"
 						name="tenBct"
 						type="text"
+						invalid={errors.tenBct}
 						value={inputs.tenBct}
 					/>
+					<FormFeedback invalid>
+						Bạn cần phải nhập tên bên cho thuê !
+					</FormFeedback>
 				</FormGroup>
 				<FormGroup>
 					<Label for="diaChi">Địa chỉ</Label>
@@ -76,29 +112,13 @@ const NewLessor: React.FC = () => {
 						id="diaChi"
 						name="diaChi"
 						type="text"
+						invalid={errors.diaChi}
 						value={inputs.diaChi}
 					/>
+					<FormFeedback invalid>
+						Bạn cần phải nhập địa chỉ bên cho thuê !
+					</FormFeedback>
 				</FormGroup>
-				{/* <FormGroup>
-					<Label for="giaTrungBinh">Giá trung bình</Label>
-					<Input
-						onChange={handleInputChange}
-						name="giaTrungBinh"
-						type="text"
-					/>
-				</FormGroup> */}
-				{/* <FormGroup>
-					<Label for="soSao">Số sao</Label>
-					<Input id="soSao" name="soSao" type="text" />
-				</FormGroup> */}
-				{/* <FormGroup>
-					<Label for="luotDanhGia">Lượt đánh giá</Label>
-					<Input
-						id="luotDanhGia"
-						name="luotDanhGia"
-						type="text"
-					/>
-				</FormGroup> */}
 				<FormGroup>
 					<Label for="moTa">Mô tả</Label>
 					<Input
@@ -106,8 +126,12 @@ const NewLessor: React.FC = () => {
 						id="moTa"
 						name="moTa"
 						type="text"
+						invalid={errors.moTa}
 						value={inputs.moTa}
 					/>
+					<FormFeedback invalid>
+						Bạn cần phải nhập mô tả bên cho thuê !
+					</FormFeedback>
 				</FormGroup>
 				<FormGroup>
 					<Label for="hinhAnh">Hình ảnh</Label>
@@ -115,8 +139,12 @@ const NewLessor: React.FC = () => {
 						onChange={handleFileChanges}
 						id="hinhAnh"
 						type="file"
+						invalid={errors.hinhAnh}
 						multiple
 					/>
+					<FormFeedback invalid>
+						Bạn cần ít nhất 2 hình ảnh bên cho thuê !
+					</FormFeedback>
 				</FormGroup>
 				<FormGroup>
 					<Label for="maLuuTru">Loại hình lưu trú</Label>
@@ -131,16 +159,26 @@ const NewLessor: React.FC = () => {
 						<option value="LLT2">Villa</option>
 					</Input>
 				</FormGroup>
-				{/* <FormGroup>
-					<Label for="diemTienNghi">Điểm tiện nghi</Label>
+				<FormGroup check>
 					<Input
-						id="diemTienNghi"
-						name="diemTienNghi"
-						type="text"
+						id="privacy"
+						type="checkbox"
+						invalid={errors.privacy}
+						checked={inputs.privacy}
+						onChange={() =>
+							setInputs({
+								...inputs,
+								privacy: !inputs.privacy,
+							})
+						}
 					/>
-				</FormGroup> */}
+					<Label check>Tôi đồng ý với các điều khoản</Label>
+					<Link to="#" className="text-decoration-none ms-2">
+						Xem các điều khoản
+					</Link>
+				</FormGroup>
 				<div className="d-flex justify-content-center">
-					<Button color="primary">Tiep tuc</Button>
+					<Button color="primary">Tiếp tục</Button>
 				</div>
 			</Form>
 		</Container>

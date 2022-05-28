@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
 	Button,
 	Container,
-	Form,
-	Input,
 	Modal,
 	ModalBody,
 	ModalFooter,
@@ -59,11 +57,18 @@ const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
 							Tạo căn hộ mới
 						</ModalHeader>
 						<ModalBody>
-							<NewApartment />
+							<NewApartment
+								setModal={setModal}
+								modal={modal}
+							/>
 						</ModalBody>
 						<ModalFooter>
-							<Button color="primary" onClick={toggle}>
-								Okay
+							<Button
+								color="primary"
+								type="submit"
+								form="new-apartment-form"
+							>
+								Xác nhận
 							</Button>
 						</ModalFooter>
 					</Modal>
