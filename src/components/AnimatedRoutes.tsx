@@ -11,6 +11,7 @@ import PaymentSuccess from "../feature/Payment/pages/success";
 import UserMe from "../feature/Me/pages/me";
 import NewApartment from "../feature/Admin/pages/NewApartment";
 import NewLessor from "../feature/Admin/pages/NewLessor";
+import Chart from "../feature/Admin/pages/Chart";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
@@ -40,6 +41,7 @@ const AnimatedRoute: React.FC = () => {
 							path="/:id/newApartment"
 							element={<NewApartment />}
 						/>
+						<Route path="chart" element={<Chart />} />
 					</Route>
 				</Routes>
 			</AnimatePresence>

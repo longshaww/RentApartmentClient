@@ -51,10 +51,15 @@ const Search: React.FC<{
 	};
 
 	const sendQuery = async () => {
-		if (!searchInput) return;
-		setSearchParams(`tenBct=${searchInput}`);
-		const data = await axiosMethod(`lessor?tenBct=${searchInput}`, "get");
-		setListLessor(data);
+		if (!searchInput) {
+			setSearchParams("");
+			return;
+		}
+		setSearchParams(`q=${searchInput}`);
+		const data = await axiosMethod(`lessor?q=${searchInput}`, "get");
+		if (data.success) {
+			setListLessor(data.body);
+		}
 	};
 
 	return (

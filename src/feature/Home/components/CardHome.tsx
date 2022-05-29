@@ -22,12 +22,14 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 	useEffect(() => {
 		async function getData() {
 			const data = await axiosMethod(
-				searchParams.get("tenBct")
+				searchParams.get("q") !== null
 					? `lessor?${searchParams}`
 					: `lessor`,
 				"get"
 			);
-			setListLessor(data);
+			if (data.success) {
+				setListLessor(data.body);
+			}
 		}
 		getData();
 	}, [setListLessor, searchParams]);
