@@ -39,7 +39,7 @@ const Home: React.FC = () => {
 									Đăng kí căn hộ / villa mới
 								</Link>
 								<Link
-									to="#"
+									to="/chart"
 									className="text-decoration-none ms-5"
 								>
 									Xem thống kê / doanh thu

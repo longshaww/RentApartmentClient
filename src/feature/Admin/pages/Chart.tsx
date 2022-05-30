@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import axiosMethod from "../../../utils/api";
 import moment from "moment";
+import { Container } from "reactstrap";
 ChartJS.register(...registerables);
 
 const Chart: React.FC = () => {
-	const [listBill, setListBill] = useState<any>({});
-	const [listDay, setListDay] = useState<any>([]);
-	const days: string[] = [];
-	const price = [];
+	const [listBill, setListBill] = useState<any>([]);
+
 	useEffect(() => {
 		async function getBill() {
 			const data = await axiosMethod("bill", "get");
@@ -27,15 +26,37 @@ const Chart: React.FC = () => {
 			},
 		},
 	};
-	for (let i = 0; i < 7; i++) {
-		days.push(moment(listBill.minDay).add(i, "days").format("ll"));
-	}
+	const arrPrice = listBill.map((bill: any) => {
+		const arrBills = bill.bills;
+		if (arrBills.length > 1) {
+			const reduceFirst = arrBills.reduce(
+				(acc: any, bill: any) => acc.TongTien + bill.TongTien
+			);
+			return [reduceFirst];
+		}
+		return arrBills.map((b: any) => {
+			if (b.TongTien) {
+				b = b.TongTien;
+			}
+			return b;
+		});
+	});
+
+	arrPrice.map((b: any) => {
+		if (b.length === 0) {
+			b[0] = 0;
+		}
+		return b;
+	});
+
 	const data = {
-		labels: days,
+		labels: listBill.map((bill: any) => {
+			return moment(bill.day).format("ll");
+		}),
 		datasets: [
 			{
 				label: "Thống kê theo ngày",
-				data: [123, 123],
+				data: arrPrice.flat(),
 				backgroundColor: [
 					"rgba(255, 99, 132, 0.2)",
 					"rgba(54, 162, 235, 0.2)",
@@ -57,7 +78,11 @@ const Chart: React.FC = () => {
 		],
 	};
 
-	return <>{listBill.bills && <Line options={options} data={data} />}</>;
+	return (
+		<Container>
+			{listBill.length > 0 && <Line options={options} data={data} />}
+		</Container>
+	);
 };
 
 export default Chart;
