@@ -1,16 +1,19 @@
 import { Chart as ChartJS, registerables } from "chart.js";
-import { useEffect } from "react";
-import { Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
 import axiosMethod from "../../../utils/api";
 import moment from "moment";
 ChartJS.register(...registerables);
 
 const Chart: React.FC = () => {
-	const days = [];
+	const [listBill, setListBill] = useState<any>({});
+	const [listDay, setListDay] = useState<any>([]);
+	const days: string[] = [];
+	const price = [];
 	useEffect(() => {
 		async function getBill() {
 			const data = await axiosMethod("bill", "get");
-			console.log(data);
+			setListBill(data);
 		}
 		getBill();
 	}, []);
@@ -24,16 +27,15 @@ const Chart: React.FC = () => {
 			},
 		},
 	};
-
 	for (let i = 0; i < 7; i++) {
-		days.push(moment().add(i, "days").format("ll"));
+		days.push(moment(listBill.minDay).add(i, "days").format("ll"));
 	}
 	const data = {
 		labels: days,
 		datasets: [
 			{
 				label: "Thống kê theo ngày",
-				data: [12, 19, 3, 5, 2, 3],
+				data: [123, 123],
 				backgroundColor: [
 					"rgba(255, 99, 132, 0.2)",
 					"rgba(54, 162, 235, 0.2)",
@@ -55,7 +57,7 @@ const Chart: React.FC = () => {
 		],
 	};
 
-	return <Bar options={options} data={data} />;
+	return <>{listBill.bills && <Line options={options} data={data} />}</>;
 };
 
 export default Chart;
