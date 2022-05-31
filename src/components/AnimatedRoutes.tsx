@@ -11,7 +11,7 @@ import PaymentSuccess from "../feature/Payment/pages/success";
 import UserMe from "../feature/Me/pages/me";
 import NewApartment from "../feature/Admin/pages/NewApartment";
 import NewLessor from "../feature/Admin/pages/NewLessor";
-import Chart from "../feature/Admin/pages/Chart";
+import Chart from "../feature/Admin/pages";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
