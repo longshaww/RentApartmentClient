@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import axiosMethod from "../../../utils/api";
 import moment from "moment";
-import { Container } from "reactstrap";
+import { Container, Input } from "reactstrap";
 ChartJS.register(...registerables);
 
 const Chart: React.FC = () => {
@@ -79,7 +79,27 @@ const Chart: React.FC = () => {
 	};
 
 	return (
-		<Container>
+		<Container className="pt-5">
+			{listBill.length > 0 && (
+				<Input type="select">
+					<option>
+						{moment(listBill[0].day).format("ll") +
+							" - " +
+							moment(
+								listBill[listBill.length - 1].day
+							).format("ll")}
+					</option>
+					<option>
+						{moment(listBill[listBill.length - 1].day)
+							.add(1, "days")
+							.format("ll") +
+							" - " +
+							moment(listBill[listBill.length - 1].day)
+								.add(7, "days")
+								.format("ll")}
+					</option>
+				</Input>
+			)}
 			{listBill.length > 0 && <Line options={options} data={data} />}
 		</Container>
 	);

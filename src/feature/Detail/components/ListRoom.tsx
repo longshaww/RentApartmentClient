@@ -26,6 +26,7 @@ import { deleteConfirm } from "../../../utils/delete.confirm.sweet-alert";
 import ApartmentDetail from "./ApartmentDetail";
 import EditApartmentModal from "./EditApartment.modal";
 import CreateApartmentModal from "./CreateApartment.modal";
+import { userGlobalCheck } from "../../../utils/user.me";
 
 const CardRoom: React.FC = () => {
 	const { id } = useParams();
@@ -38,7 +39,7 @@ const CardRoom: React.FC = () => {
 	const [listApartment, setListApartment] = useState<any>([]);
 
 	const [imgSlider, setImgSlider] = useState<number>(0);
-
+	const userMe = userGlobalCheck();
 	// Toggle for Modal
 
 	//get single apartment when view detail
@@ -110,10 +111,13 @@ const CardRoom: React.FC = () => {
 				setEditApartmentModal={setEditApartmentModal}
 			/>
 
-			<CreateApartmentModal
-				listApartment={listApartment}
-				setListApartment={setListApartment}
-			/>
+			{userMe.user && userMe.user.type === "PARTNER" && (
+				<CreateApartmentModal
+					listApartment={listApartment}
+					setListApartment={setListApartment}
+				/>
+			)}
+
 			<ApartmentDetail
 				detailApartmentModal={detailApartmentModal}
 				setDetailApartmentModal={setDetailApartmentModal}
@@ -251,29 +255,34 @@ const CardRoom: React.FC = () => {
 															canho.tenCanHo
 														}
 													</CardTitle>
-
-													<div className="ms-auto">
-														<button
-															className="btn"
-															onClick={() =>
-																onEditApartmentClick(
-																	canho.maCanHo
-																)
-															}
-														>
-															<AiOutlineEdit className="fs-4" />
-														</button>
-														<button
-															className="btn"
-															onClick={() =>
-																onDeleteApartmentClick(
-																	canho.maCanHo
-																)
-															}
-														>
-															<AiOutlineDelete className="fs-4" />
-														</button>
-													</div>
+													{userMe.user &&
+														userMe
+															.user
+															.type ===
+															"PARTNER" && (
+															<div className="ms-auto">
+																<button
+																	className="btn"
+																	onClick={() =>
+																		onEditApartmentClick(
+																			canho.maCanHo
+																		)
+																	}
+																>
+																	<AiOutlineEdit className="fs-4" />
+																</button>
+																<button
+																	className="btn"
+																	onClick={() =>
+																		onDeleteApartmentClick(
+																			canho.maCanHo
+																		)
+																	}
+																>
+																	<AiOutlineDelete className="fs-4" />
+																</button>
+															</div>
+														)}
 												</div>
 
 												{dataCardRoom.information.map(

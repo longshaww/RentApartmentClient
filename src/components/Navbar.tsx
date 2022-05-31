@@ -17,16 +17,19 @@ import { ReactComponent as Logo } from "../assets/svg/logo.svg";
 import { ReactComponent as Icon1 } from "../assets/svg/icon1.svg";
 import { ReactComponent as Icon2 } from "../assets/svg/icon2.svg";
 import { ReactComponent as Icon3 } from "../assets/svg/icon3.svg";
+import { userGlobalCheck } from "../utils/user.me";
+import { MdAccountCircle } from "react-icons/md";
 
 const NavbarApp: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toggle = () => setIsOpen(!isOpen);
-	const userMe = JSON.parse(localStorage.getItem("user_me") || "{}");
+	const userMe = userGlobalCheck();
+
 	const onLogOutClick = () => {
 		const { REACT_APP_LOGIN_URL } = process.env;
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("user_me");
-		window.location.href = `${REACT_APP_LOGIN_URL}http:/${window.location.host}/me`;
+		window.location.href = `${REACT_APP_LOGIN_URL}http://${window.location.host}/me`;
 	};
 
 	const menu = [
@@ -193,25 +196,60 @@ const NavbarApp: React.FC = () => {
 											</DropdownMenu>
 										</UncontrolledDropdown>
 									</NavItem>
-									{userMe.name && (
-										<>
-											<NavItem>
-												<span className="nav-link fw-bold btn">
-													{userMe.name}
-												</span>
-											</NavItem>
-
-											<NavItem>
-												<span
-													className="nav-link fw-bold btn"
-													onClick={
-														onLogOutClick
-													}
+									{userMe.user && (
+										<div className="d-flex">
+											<MdAccountCircle
+												size={40}
+											/>
+											<UncontrolledDropdown>
+												<DropdownToggle
+													caret
 												>
-													Log out
-												</span>
-											</NavItem>
-										</>
+													{
+														userMe.user!
+															.name
+													}
+												</DropdownToggle>
+												<DropdownMenu>
+													{userMe.user
+														.type ===
+														"PARTNER" && (
+														<>
+															<Link
+																to="/newLessor"
+																className="dropdown-item"
+															>
+																Đăng
+																kí
+																villa/căn
+																hộ
+																mới
+															</Link>
+															<Link
+																to="/chart"
+																className="dropdown-item"
+															>
+																Xem
+																thông
+																kê/doanh
+																thu
+															</Link>
+															<DropdownItem
+																divider
+															/>
+														</>
+													)}
+													<div
+														className="dropdown-item"
+														onClick={
+															onLogOutClick
+														}
+													>
+														Log out
+													</div>
+												</DropdownMenu>
+											</UncontrolledDropdown>
+										</div>
 									)}
 								</Nav>
 							</Collapse>
@@ -261,6 +299,15 @@ const NavbarApp: React.FC = () => {
 									</UncontrolledDropdown>
 								);
 							})}
+						</div>
+					</div>
+
+					<div className="p-4 shadow bg-dark text-light">
+						<div className="text-center">
+							{userMe.user &&
+							userMe.user.type === "PARTNER"
+								? userMe.user.companyName
+								: "Welcome to Traveloka"}
 						</div>
 					</div>
 				</div>

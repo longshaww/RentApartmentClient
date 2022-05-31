@@ -12,21 +12,34 @@ import axiosMethod from "../../../utils/api";
 import { Card, CardBody, CardText, CardTitle } from "reactstrap";
 import Pagination from "../../../components/Pagination";
 import { checkImageString } from "../../../utils/check.image";
+import { userGlobalCheck } from "../../../utils/user.me";
 
 const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 	listLessor,
 	setListLessor,
 }) => {
 	let [searchParams] = useSearchParams();
+	const userMe = userGlobalCheck();
 
 	useEffect(() => {
 		async function getData() {
-			const data = await axiosMethod(
-				searchParams.get("q") !== null
-					? `lessor?${searchParams}`
-					: `lessor`,
-				"get"
-			);
+			let data;
+			if (userMe.user!.type === "PARTNER") {
+				data = await axiosMethod(
+					`lessor?partnerID=${userMe.user!.userId}`,
+					"get"
+				);
+			}
+			if (searchParams.get("q") !== null) {
+				data = await axiosMethod(`lessor?${searchParams}`, "get");
+			}
+
+			if (
+				searchParams.get("q") === null &&
+				userMe.user!.type !== "PARTNER"
+			) {
+				data = await axiosMethod(`lessor`, "get");
+			}
 			if (data.success) {
 				setListLessor(data.body);
 			}
@@ -169,9 +182,6 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 						</Card>
 					);
 				})}
-			<div className="d-flex justify-content-center z-index mt-5">
-				<Pagination />
-			</div>
 		</>
 	);
 };

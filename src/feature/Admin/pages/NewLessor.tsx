@@ -13,9 +13,11 @@ import {
 } from "reactstrap";
 import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
+import { userGlobalCheck } from "../../../utils/user.me";
 
 const NewLessor: React.FC = () => {
 	const navigate = useNavigate();
+	const userMe = userGlobalCheck();
 
 	const [inputs, setInputs] = useState<any>({
 		tenBct: "",
@@ -69,6 +71,8 @@ const NewLessor: React.FC = () => {
 		for (const key in inputs) {
 			formData.append(key, inputs[key]);
 		}
+
+		formData.append("maPartner", userMe.user!.userId);
 
 		const res = await axiosMethod("lessor", "post", formData);
 		if (res.success) {
