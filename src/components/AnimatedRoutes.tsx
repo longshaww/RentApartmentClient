@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Detail from "../feature/Detail/pages/Detail";
 import Home from "../feature/Home/pages/Home";
 import Booking from "../feature/Info/pages/booking";
@@ -18,33 +17,28 @@ const AnimatedRoute: React.FC = () => {
 
 	return (
 		<>
-			<AnimatePresence>
-				<Routes location={location} key={location.pathname}>
-					<Route path="/" element={<Layout />}>
-						<Route path="/:id" element={<Detail />} />
-						<Route
-							path="/:id/booking"
-							element={<Booking />}
-						/>
-						<Route index element={<Home />} />
-						<Route
-							path="/:id/booking/payment"
-							element={<Payments />}
-						/>
-						<Route
-							path="/:id/booking/payment/success"
-							element={<PaymentSuccess />}
-						/>
-						<Route path="me" element={<UserMe />} />
-						<Route path="newLessor" element={<NewLessor />} />
-						<Route
-							path="/:id/newApartment"
-							element={<NewApartment />}
-						/>
-						<Route path="chart" element={<Chart />} />
-					</Route>
-				</Routes>
-			</AnimatePresence>
+			<Routes location={location} key={location.pathname}>
+				<Route path="/" element={<Layout />}>
+					<Route path="/:id" element={<Detail />} />
+					<Route path="/:id/booking" element={<Booking />} />
+					<Route index element={<Home />} />
+					<Route
+						path="/:id/booking/payment"
+						element={<Payments />}
+					/>
+					<Route
+						path="/:id/booking/payment/success"
+						element={<PaymentSuccess />}
+					/>
+					<Route path="me" element={<UserMe />} />
+					<Route path="newLessor" element={<NewLessor />} />
+					<Route
+						path="/:id/newApartment"
+						element={<NewApartment />}
+					/>
+					<Route path="chart" element={<Chart />} />
+				</Route>
+			</Routes>
 		</>
 	);
 };

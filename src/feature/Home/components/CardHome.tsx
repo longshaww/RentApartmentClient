@@ -10,7 +10,6 @@ import globalStateAndAction from "../../../container/global.state.action";
 import "regenerator-runtime/runtime";
 import axiosMethod from "../../../utils/api";
 import { Card, CardBody, CardText, CardTitle } from "reactstrap";
-import Pagination from "../../../components/Pagination";
 import { checkImageString } from "../../../utils/check.image";
 import { userGlobalCheck } from "../../../utils/user.me";
 
