@@ -6,7 +6,7 @@ import moment from "moment";
 import { Container, Input } from "reactstrap";
 ChartJS.register(...registerables);
 
-const Chart: React.FC = () => {
+const Admin: React.FC = () => {
 	const [listBill, setListBill] = useState<any>([]);
 
 	useEffect(() => {
@@ -79,30 +79,47 @@ const Chart: React.FC = () => {
 	};
 
 	return (
-		<Container className="pt-5">
-			{listBill.length > 0 && (
-				<Input type="select">
-					<option>
-						{moment(listBill[0].day).format("ll") +
-							" - " +
-							moment(
-								listBill[listBill.length - 1].day
-							).format("ll")}
-					</option>
-					<option>
-						{moment(listBill[listBill.length - 1].day)
-							.add(1, "days")
-							.format("ll") +
-							" - " +
-							moment(listBill[listBill.length - 1].day)
-								.add(7, "days")
-								.format("ll")}
-					</option>
-				</Input>
-			)}
-			{listBill.length > 0 && <Line options={options} data={data} />}
-		</Container>
+		<>
+			<div
+				className="position-fixed bg-dark h-100 text-light"
+				style={{ width: "15rem" }}
+			>
+				<ul className="d-flex flex-column align-items-center p-0">
+					<li>Hello</li>
+					<li>Hello</li>
+					<li>Hello</li>
+					<li>Hello</li>
+				</ul>
+			</div>
+			<Container className="pt-5">
+				{listBill.length > 0 && (
+					<Input type="select">
+						<option>
+							{moment(listBill[0].day).format("ll") +
+								" - " +
+								moment(
+									listBill[listBill.length - 1].day
+								).format("ll")}
+						</option>
+						<option>
+							{moment(listBill[listBill.length - 1].day)
+								.add(1, "days")
+								.format("ll") +
+								" - " +
+								moment(
+									listBill[listBill.length - 1].day
+								)
+									.add(7, "days")
+									.format("ll")}
+						</option>
+					</Input>
+				)}
+				{listBill.length > 0 && (
+					<Line options={options} data={data} />
+				)}
+			</Container>
+		</>
 	);
 };
 
-export default Chart;
+export default Admin;
