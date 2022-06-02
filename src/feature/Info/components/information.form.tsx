@@ -101,7 +101,6 @@ const InformationForm: React.FC<{
 			yeuCau: stringCheckbox,
 			tongTienCanHo: gia,
 			soLuongCanHo: 1,
-			trangThai: false,
 			thue,
 			ngayTao: new Date(),
 			tongTien: thanhTien,

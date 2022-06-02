@@ -7,16 +7,18 @@ import axiosMethod from "../../../utils/api";
 
 export default function AdminHome() {
 	const [listBill, setListBill] = useState<any>([]);
+	const [tableData, setTableData] = useState<any>([]);
 
 	useEffect(() => {
 		async function getBill() {
-			const data = await axiosMethod("bill/chart", "get");
-			setListBill(data);
+			const chartData = await axiosMethod("bill/chart", "get");
+			const tableData = await axiosMethod("bill", "get");
+			setTableData(tableData);
+			setListBill(chartData);
 		}
 		getBill();
 	}, []);
 
-	console.log(listBill);
 	return (
 		<div className="home">
 			<FeaturedInfo />
@@ -28,7 +30,7 @@ export default function AdminHome() {
 			/>
 			<div className="homeWidgets">
 				{/* <WidgetSm /> */}
-				<WidgetLg />
+				<WidgetLg rows={tableData} />
 			</div>
 		</div>
 	);

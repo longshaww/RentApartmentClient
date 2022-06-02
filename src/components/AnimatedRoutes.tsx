@@ -12,6 +12,7 @@ import NewApartment from "../feature/Admin/pages/NewApartment";
 import NewLessor from "../feature/Admin/pages/NewLessor";
 import AdminHome from "../feature/Admin/pages";
 import LayoutAdmin from "../layout/Layout.admin";
+import BillDetail from "../feature/Admin/pages/bill.detail";
 
 const AnimatedRoute: React.FC = () => {
 	const location = useLocation();
@@ -37,8 +38,9 @@ const AnimatedRoute: React.FC = () => {
 						path="/:id/newApartment"
 						element={<NewApartment />}
 					/>
-					<Route path="/admin" element={<LayoutAdmin />}>
+					<Route path="admin" element={<LayoutAdmin />}>
 						<Route index element={<AdminHome />} />
+						<Route path="bill/:id" element={<BillDetail />} />
 					</Route>
 				</Route>
 			</Routes>
