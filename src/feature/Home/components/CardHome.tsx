@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import "../../../assets/css/app.scss";
 import "../../../assets/css/link.scss";
@@ -12,14 +12,19 @@ import axiosMethod from "../../../utils/api";
 import { Card, CardBody, CardText, CardTitle } from "reactstrap";
 import { checkImageString } from "../../../utils/check.image";
 import { userGlobalCheck } from "../../../utils/user.me";
+import { formatPrice } from "../../../utils/format.price";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import EditLessorModal from "./EditLessorModal";
+import { deleteConfirm } from "../../../utils/delete.confirm.sweet-alert";
 
-const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
+const CardHome: React.FC<any> = ({
 	listLessor,
 	setListLessor,
+	setEditLessorModal,
+	setLessorEditId,
 }) => {
 	let [searchParams] = useSearchParams();
 	const userMe = userGlobalCheck();
-
 	useEffect(() => {
 		async function getData() {
 			let data;
@@ -46,8 +51,31 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 		getData();
 	}, [setListLessor, searchParams]);
 
+	const onEditLessorClick = (id: string) => {
+		setEditLessorModal();
+		setLessorEditId(id);
+	};
+
+	const onDeleteLessorClick = async (id: string) => {
+		deleteConfirm(
+			"Lessor has been deleted",
+			"Nothing happen yet !",
+			async () => {
+				const findById = listLessor.find(
+					(a: any) => a.maBct === id
+				);
+				const index = listLessor.indexOf(findById);
+				setListLessor([
+					...listLessor.slice(0, index),
+					...listLessor.slice(index + 1),
+				]);
+				await axiosMethod(`lessor/${id}`, "delete");
+			}
+		);
+	};
 	return (
 		<>
+			<EditLessorModal />
 			{listLessor &&
 				listLessor.map((item: any) => {
 					return (
@@ -130,7 +158,33 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 										</CardBody>
 									</div>
 								</Link>
-								<div className="col-2 border-start d-flex">
+								<div className="col-2 border-start d-flex flex-column">
+									<CardBody>
+										<button
+											className="btn"
+											onClick={() =>
+												onEditLessorClick(
+													item.maBct
+												)
+											}
+										>
+											<AiOutlineEdit
+												size={22}
+											/>
+										</button>
+										<button
+											className="btn"
+											onClick={() =>
+												onDeleteLessorClick(
+													item.maBct
+												)
+											}
+										>
+											<AiOutlineDelete
+												size={22}
+											/>
+										</button>
+									</CardBody>
 									<CardBody className="col-12 bottom-0 align-self-end">
 										<CardText className="mb-0">
 											<small className="text-primary fw-bold">
@@ -147,13 +201,9 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 											tag="h5"
 											className="color-price fw-bold m-0 mb-0"
 										>
-											{item.giaTrungBinh
-												.toString()
-												.includes(".")
-												? item.giaTrungBinh +
-												  "00 VND"
-												: item.giaTrungBinh +
-												  ".000 VNĐ"}
+											{formatPrice(
+												item.giaTrungBinh
+											)}
 										</CardTitle>
 										<select
 											className="card-text form-select border-0"
@@ -161,9 +211,7 @@ const CardHome: React.FC<{ listLessor: any; setListLessor: any }> = ({
 											aria-label="Default select example"
 										>
 											<option selected>
-												<small>
-													Giá cuối cùng
-												</small>
+												Giá cuối cùng
 											</option>
 											<option value="1">
 												One

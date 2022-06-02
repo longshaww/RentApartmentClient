@@ -5,7 +5,6 @@ import CardDetail from "../components/LessorDetail";
 import CardRoom from "../components/ListRoom";
 import axiosMethod from "../../../utils/api";
 import globalStateAndAction from "../../../container/global.state.action";
-import { motion } from "framer-motion";
 
 const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
 	const { id } = useParams();
@@ -19,18 +18,14 @@ const Detail: React.FC<{ setDetailLessor: any }> = ({ setDetailLessor }) => {
 	}, [id, setDetailLessor]);
 
 	return (
-		<motion.div
-			initial={{ width: 0 }}
-			animate={{ width: "100%" }}
-			exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
-		>
+		<>
 			<Container className="pt-5">
 				<Container fluid="md">
 					<CardDetail />
 					<CardRoom />
 				</Container>
 			</Container>
-		</motion.div>
+		</>
 	);
 };
 

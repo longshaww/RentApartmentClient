@@ -5,6 +5,7 @@ import { detailApartmentReducer } from "./detail.apartment";
 import { dateChoosenReducer } from "./date.choosen";
 import { billInformationReducer } from "./bill.information";
 import { userMeReducer } from "./user.me";
+import { adminReducer } from "./admin";
 
 const rootReducer = combineReducers({
 	detailLessor: detailLessorReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
 	dateChoosen: dateChoosenReducer,
 	billInformation: billInformationReducer,
 	userMe: userMeReducer,
+	admin: adminReducer,
 });
 
 export default rootReducer;

@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
 	return (
-		<div className="sidebar">
+		<div className="sidebar shadow px-4 pt-4">
 			<div className="sidebarWrapper">
 				<div className="sidebarMenu">
 					<h3 className="sidebarTitle">Dashboard</h3>
@@ -28,10 +28,12 @@ export default function Sidebar() {
 								Home
 							</li>
 						</Link>
-						<li className="sidebarListItem">
-							<Timeline className="sidebarIcon" />
-							Analytics
-						</li>
+						<Link to="/admin" className="link">
+							<li className="sidebarListItem">
+								<Timeline className="sidebarIcon" />
+								Analytics
+							</li>
+						</Link>
 						<li className="sidebarListItem">
 							<TrendingUp className="sidebarIcon" />
 							Sales
@@ -41,16 +43,16 @@ export default function Sidebar() {
 				<div className="sidebarMenu">
 					<h3 className="sidebarTitle">Quick Menu</h3>
 					<ul className="sidebarList">
-						<Link to="/users" className="link">
+						<Link to="/admin/user" className="link">
 							<li className="sidebarListItem">
 								<PermIdentity className="sidebarIcon" />
 								Users
 							</li>
 						</Link>
-						<Link to="/products" className="link">
+						<Link to="/admin/newLessor" className="link">
 							<li className="sidebarListItem">
 								<Storefront className="sidebarIcon" />
-								Lessor
+								New Lessor
 							</li>
 						</Link>
 						<li className="sidebarListItem">

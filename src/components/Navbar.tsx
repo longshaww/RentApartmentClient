@@ -226,7 +226,7 @@ const NavbarApp: React.FC = () => {
 																mới
 															</Link>
 															<Link
-																to="/chart"
+																to="/admin"
 																className="dropdown-item"
 															>
 																Xem
