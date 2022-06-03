@@ -13,6 +13,7 @@ import Layout from "./layout/Layout";
 import LayoutAdmin from "./layout/Layout.admin";
 import Home from "./feature/Home/pages/Home";
 import NewLessor from "./feature/Admin/pages/NewLessor";
+import TransactionAdmin from "./feature/Admin/pages/transactions";
 const App: React.FC = () => {
 	return (
 		<>
@@ -37,6 +38,10 @@ const App: React.FC = () => {
 					<Route path="admin" element={<LayoutAdmin />}>
 						<Route index element={<AdminHome />} />
 						<Route path="newLessor" element={<NewLessor />} />
+						<Route
+							path="transactions"
+							element={<TransactionAdmin />}
+						/>
 						<Route path="bill/:id" element={<BillDetail />} />
 					</Route>
 				</Route>

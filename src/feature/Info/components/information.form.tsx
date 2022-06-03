@@ -108,6 +108,7 @@ const InformationForm: React.FC<{
 			maCanHo: detailApartment.maCanHo,
 			thoiGianNhan: checkInDate,
 			thoiGianTra: checkOutDate,
+			trangThai: true,
 		};
 		// sendReq(data);
 		await MySwal.fire({

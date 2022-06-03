@@ -80,7 +80,7 @@ export default function PaymentForm() {
 			elements,
 			confirmParams: {
 				// Make sure to change this to your payment completion page
-				return_url: `${window.location.host}${id}/booking/payment/success`,
+				return_url: `http://${window.location.host}/${id}/booking/payment/success`,
 			},
 		});
 
