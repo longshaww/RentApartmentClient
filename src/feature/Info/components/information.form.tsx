@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Card,
 	Form,
@@ -18,6 +18,10 @@ import globalStateAndAction from "../../../container/global.state.action";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { userGlobalCheck } from "../../../utils/user.me";
+import { APP_ID, TYPE_VOUCHER } from "../../../constant/constant";
+import { formatPrice } from "../../../utils/format.price";
 
 const InformationForm: React.FC<{
 	detailApartment: any;
@@ -25,6 +29,7 @@ const InformationForm: React.FC<{
 	checkOutDate: any;
 }> = ({ detailApartment, checkInDate, checkOutDate }) => {
 	const navigate = useNavigate();
+	const userMe = userGlobalCheck();
 	//Info handling
 	const [inputs, setInputs] = useState<any>({ ten: "", sdt: "", email: "" });
 	const [errors, setErrors] = useState<any>({
@@ -32,6 +37,22 @@ const InformationForm: React.FC<{
 		sdt: false,
 		email: false,
 	});
+	const [vouchers, setVouchers] = useState<any>([]);
+
+	//PriceDetails handling
+	const thue = 10;
+	const [total, setTotal] = useState<any>();
+	const gia = detailApartment.gia;
+
+	useEffect(() => {
+		if (gia) {
+			let tienThue = (gia * thue) / 100;
+			let thanhTien = gia + tienThue;
+			setTotal(thanhTien);
+		}
+	}, [gia]);
+
+	//Xử lý inputs
 	const handleChange = (event: any) => {
 		const name = event.target.name;
 		const value = event.target.value;
@@ -47,6 +68,16 @@ const InformationForm: React.FC<{
 			title: "Tôi đang đặt cho người khác",
 			id: "flexRadioDefault2",
 		},
+	];
+
+	const requirements: string[] = [
+		"Phòng không hút thuốc",
+		"Phòng liên thông",
+		"Tầng lầu",
+		"Loại giường",
+		"Giờ nhận phòng",
+		"Giờ trả phòng",
+		"Khác",
 	];
 
 	//Requirement handling
@@ -66,21 +97,46 @@ const InformationForm: React.FC<{
 
 	const stringCheckbox = checkbox.join(",").toString();
 
-	const requirements: string[] = [
-		"Phòng không hút thuốc",
-		"Phòng liên thông",
-		"Tầng lầu",
-		"Loại giường",
-		"Giờ nhận phòng",
-		"Giờ trả phòng",
-		"Khác",
-	];
+	//get voucher
+	useEffect(() => {
+		async function getVoucher() {
+			if (detailApartment.maPartner) {
+				const res = await axios.get(
+					`${process.env.REACT_APP_VOUCHER_BE}eligible?typeVoucher=apart`,
+					{
+						headers: {
+							user_id: userMe.user!.userId,
+							partner_id: detailApartment.maPartner,
+							app_id: APP_ID,
+						},
+					}
+				);
+				if (res.status === 200) {
+					setVouchers(res.data.data.vouchers);
+				}
+			}
+		}
+		getVoucher();
+	}, [detailApartment.maPartner]);
 
-	//PriceDetails handling
-	const thue = 10;
-	let gia = detailApartment.gia;
-	let tienThue = (detailApartment.gia * thue) / 100;
-	let thanhTien = gia + tienThue;
+	//handle voucher change
+
+	const onVoucherSelectChange = async (e: any) => {
+		const value = e.target.value;
+		if (value === "Chọn voucher") return;
+		const res: any = await axios.get(
+			`${process.env.REACT_APP_VOUCHER_BE}check-condition?amount=${total}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
+			{
+				headers: {
+					user_id: userMe.user!.userId,
+					partner_id: detailApartment.maPartner,
+				},
+			}
+		);
+		if (res.status === 200) {
+			setTotal(total - res.data.data.amount);
+		}
+	};
 
 	//form Submit
 	const MySwal = withReactContent(Swal);
@@ -103,7 +159,7 @@ const InformationForm: React.FC<{
 			soLuongCanHo: 1,
 			thue,
 			ngayTao: new Date(),
-			tongTien: thanhTien,
+			tongTien: total,
 			maBct: detailApartment.maBct,
 			maCanHo: detailApartment.maCanHo,
 			thoiGianNhan: checkInDate,
@@ -329,17 +385,35 @@ const InformationForm: React.FC<{
 			</div>
 			<div className="price_details mb-5">
 				<div className="mb-3 fw-bold">Chi tiết giá</div>
+				<Label for="voucher-select" className="fw-bold">
+					Voucher
+				</Label>
+				<Input
+					id="voucher-select"
+					type="select"
+					className="mb-3"
+					onChange={onVoucherSelectChange}
+				>
+					<option>Chọn voucher</option>
+					{vouchers.length > 0 ? (
+						vouchers.map((voucher: any) => {
+							return (
+								<option value={voucher.voucherCode}>
+									{voucher.title}
+								</option>
+							);
+						})
+					) : (
+						<option>Voucher không khả dụng</option>
+					)}
+				</Input>
 				<Card className="shadow">
 					<CardTitle
 						tag="h6"
 						className="px-3 pt-3 fw-bold d-flex justify-content-between m-0"
 					>
 						<CardText className="m-0">Thành tiền</CardText>
-						<CardText>
-							{thanhTien.toString().includes(".")
-								? thanhTien + "00 VNĐ"
-								: thanhTien + ".000 VNĐ"}
-						</CardText>
+						<CardText>{total && formatPrice(total)}</CardText>
 					</CardTitle>
 					<hr />
 					<CardTitle className="p-3 d-flex justify-content-between m-0">
