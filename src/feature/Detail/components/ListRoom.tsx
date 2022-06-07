@@ -476,7 +476,10 @@ const CardRoom: React.FC = () => {
 																				);
 																			}
 																		)}
-																		{canho.phieuDatPhongs &&
+																		{canho
+																			.phieuDatPhongs
+																			.length >
+																			0 &&
 																			canho.soLuongCon <
 																				1 &&
 																			dateCheck(

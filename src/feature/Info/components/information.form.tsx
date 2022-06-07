@@ -22,6 +22,8 @@ import axios from "axios";
 import { userGlobalCheck } from "../../../utils/user.me";
 import { APP_ID, TYPE_VOUCHER } from "../../../constant/constant";
 import { formatPrice } from "../../../utils/format.price";
+import { Toast } from "../../../utils/toast.sweet-alert";
+import { v4 as uuid } from "uuid";
 
 const InformationForm: React.FC<{
 	detailApartment: any;
@@ -31,23 +33,30 @@ const InformationForm: React.FC<{
 	const navigate = useNavigate();
 	const userMe = userGlobalCheck();
 	//Info handling
-	const [inputs, setInputs] = useState<any>({ ten: "", sdt: "", email: "" });
+	const [inputs, setInputs] = useState<any>({
+		ten: userMe.user!.name,
+		sdt: userMe.user!.phone,
+		email: userMe.user!.email,
+	});
 	const [errors, setErrors] = useState<any>({
 		ten: false,
 		sdt: false,
 		email: false,
+		requirement: false,
 	});
-	const [vouchers, setVouchers] = useState<any>([]);
+	const [vouchers, setVouchers] = useState<any>({
+		listVoucher: [],
+		orderId: "",
+	});
 
 	//PriceDetails handling
 	const thue = 10;
 	const [total, setTotal] = useState<any>();
 	const gia = detailApartment.gia;
-
+	let tienThue = (gia * thue) / 100;
+	let thanhTien = gia + tienThue;
 	useEffect(() => {
 		if (gia) {
-			let tienThue = (gia * thue) / 100;
-			let thanhTien = gia + tienThue;
 			setTotal(thanhTien);
 		}
 	}, [gia]);
@@ -63,10 +72,12 @@ const InformationForm: React.FC<{
 		{
 			title: "Tôi là khách lưu trú",
 			id: "flexRadioDefault1",
+			checked: true,
 		},
 		{
 			title: "Tôi đang đặt cho người khác",
 			id: "flexRadioDefault2",
+			checked: false,
 		},
 	];
 
@@ -112,7 +123,10 @@ const InformationForm: React.FC<{
 					}
 				);
 				if (res.status === 200) {
-					setVouchers(res.data.data.vouchers);
+					setVouchers({
+						...vouchers,
+						listVoucher: res.data.data.vouchers,
+					});
 				}
 			}
 		}
@@ -123,9 +137,18 @@ const InformationForm: React.FC<{
 
 	const onVoucherSelectChange = async (e: any) => {
 		const value = e.target.value;
-		if (value === "Chọn voucher") return;
-		const res: any = await axios.get(
-			`${process.env.REACT_APP_VOUCHER_BE}check-condition?amount=${total}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
+		console.log(value);
+		if (value === "Chọn voucher") {
+			if (gia) {
+				setTotal(thanhTien);
+				setVouchers({ ...vouchers, orderId: "" });
+			}
+			return;
+		}
+		const checkVoucher = await axios.get(
+			`${process.env.REACT_APP_VOUCHER_BE}check-condition?amount=${
+				total * 1000
+			}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
 			{
 				headers: {
 					user_id: userMe.user!.userId,
@@ -133,19 +156,82 @@ const InformationForm: React.FC<{
 				},
 			}
 		);
-		if (res.status === 200) {
-			setTotal(total - res.data.data.amount);
+		if (checkVoucher.status === 200) {
+			setTotal(total - checkVoucher.data.data.amount / 1000);
+		}
+		const applyVoucher = await axios.post(
+			`${process.env.REACT_APP_VOUCHER_BE}pre-order`,
+			{
+				code: value,
+				typeVoucher: TYPE_VOUCHER,
+				transactionId: uuid(),
+				amount: total * 1000,
+			},
+			{
+				headers: {
+					user_id: userMe.user!.userId,
+					partner_id: detailApartment.maPartner,
+				},
+			}
+		);
+		if (applyVoucher.status === 200) {
+			setVouchers({
+				...vouchers,
+				orderId: applyVoucher.data.data.orderId,
+			});
+			Toast.fire({
+				icon: "success",
+				title: "Áp dụng voucher thành công",
+			});
 		}
 	};
 
+	const onCancelVoucherClick = async () => {
+		if (!vouchers.orderId) {
+			Toast.fire({
+				icon: "error",
+				title: "Không có voucher nào được chọn",
+			});
+			return;
+		}
+		const cancelVoucher = await axios.post(
+			`${process.env.REACT_APP_VOUCHER_BE}cancel-order`,
+			{
+				typeVoucher: TYPE_VOUCHER,
+				orderId: vouchers.orderId,
+			},
+			{
+				headers: {
+					user_id: userMe.user!.userId,
+					partner_id: detailApartment.maPartner,
+				},
+			}
+		);
+		if (cancelVoucher.status === 200) {
+			Toast.fire({
+				icon: "success",
+				title: "Hủy voucher thành công",
+			});
+			setVouchers({
+				...vouchers,
+				orderId: "",
+			});
+		}
+	};
 	//form Submit
 	const MySwal = withReactContent(Swal);
 
 	//Handle Submit
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		if (!inputs.ten || !inputs.email || !inputs.sdt) {
-			setErrors({ ...errors, ten: true, email: true, sdt: true });
+		if (!inputs.ten || !inputs.email || !inputs.sdt || !stringCheckbox) {
+			setErrors({
+				...errors,
+				ten: true,
+				email: true,
+				sdt: true,
+				requirement: true,
+			});
 			return MySwal.fire({
 				icon: "error",
 				title: "Oops...",
@@ -154,6 +240,7 @@ const InformationForm: React.FC<{
 		}
 		const data = {
 			...inputs,
+			maKhachHang: userMe.user!.userId,
 			yeuCau: stringCheckbox,
 			tongTienCanHo: gia,
 			soLuongCanHo: 1,
@@ -166,7 +253,6 @@ const InformationForm: React.FC<{
 			thoiGianTra: checkOutDate,
 			trangThai: true,
 		};
-		// sendReq(data);
 		await MySwal.fire({
 			title: <p>Đang xử lý</p>,
 			didOpen: () => {
@@ -176,6 +262,15 @@ const InformationForm: React.FC<{
 					"user_info_payment",
 					JSON.stringify(data)
 				);
+				if (vouchers.orderId && detailApartment.maPartner) {
+					localStorage.setItem(
+						"order_id",
+						JSON.stringify({
+							orderId: vouchers.orderId,
+							maPartner: detailApartment.maPartner,
+						})
+					);
+				}
 			},
 			timer: 1000,
 		});
@@ -316,6 +411,7 @@ const InformationForm: React.FC<{
 											type="radio"
 											name="flexRadioDefault"
 											id={guest.id}
+											checked={guest.checked}
 										/>
 										<Label
 											className="form-check-label"
@@ -350,6 +446,9 @@ const InformationForm: React.FC<{
 									return (
 										<FormGroup check>
 											<Input
+												invalid={
+													errors.requirement
+												}
 												onChange={
 													handleCheckboxChange
 												}
@@ -383,30 +482,43 @@ const InformationForm: React.FC<{
 					</CardSubtitle>
 				</Card>
 			</div>
-			<div className="price_details mb-5">
+			<div className="price_details mb-5 ">
 				<div className="mb-3 fw-bold">Chi tiết giá</div>
-				<Label for="voucher-select" className="fw-bold">
-					Voucher
-				</Label>
-				<Input
-					id="voucher-select"
-					type="select"
-					className="mb-3"
-					onChange={onVoucherSelectChange}
-				>
-					<option>Chọn voucher</option>
-					{vouchers.length > 0 ? (
-						vouchers.map((voucher: any) => {
-							return (
-								<option value={voucher.voucherCode}>
-									{voucher.title}
-								</option>
-							);
-						})
-					) : (
-						<option>Voucher không khả dụng</option>
-					)}
-				</Input>
+				<Card className="shadow mb-3 p-3">
+					<Label for="voucher-select" className="fw-bold">
+						Voucher
+					</Label>
+					<Input
+						type="select"
+						id="voucher-select"
+						className="mb-3 form-select"
+						onChange={onVoucherSelectChange}
+					>
+						<option>Chọn voucher</option>
+						{vouchers.listVoucher.length > 0 ? (
+							vouchers.listVoucher.map((voucher: any) => {
+								return (
+									<option
+										value={voucher.voucherCode}
+									>
+										{voucher.title}
+									</option>
+								);
+							})
+						) : (
+							<option>Voucher không khả dụng</option>
+						)}
+					</Input>
+					<div className="text-center">
+						<Button
+							className="w-25"
+							color="primary"
+							onClick={onCancelVoucherClick}
+						>
+							Hủy voucher
+						</Button>
+					</div>
+				</Card>
 				<Card className="shadow">
 					<CardTitle
 						tag="h6"
@@ -431,7 +543,6 @@ const InformationForm: React.FC<{
 			<div className="text-end mb-5">
 				<Button
 					type="submit"
-					// form="info-form"
 					value="Submit"
 					className="fw-bold btn_price px-4 py-2"
 				>

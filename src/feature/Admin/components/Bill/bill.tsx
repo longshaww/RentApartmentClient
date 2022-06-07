@@ -163,7 +163,8 @@ const BillComponent: React.FC<any> = ({ userMe, bill }) => {
 											color: " rgb(140, 140, 140)",
 										}}
 									>
-										Thanks for shopping.!
+										Thanks you for choosen our
+										service !
 									</h5>
 								</div>
 							</div>
