@@ -49,6 +49,7 @@ const InformationForm: React.FC<{
 		orderId: "",
 	});
 
+	const [selectVoucher, setSelectVoucher] = useState<any>("Chọn voucher");
 	//PriceDetails handling
 	const thue = 10;
 	const [total, setTotal] = useState<any>();
@@ -137,7 +138,7 @@ const InformationForm: React.FC<{
 
 	const onVoucherSelectChange = async (e: any) => {
 		const value = e.target.value;
-		console.log(value);
+		setSelectVoucher(value);
 		if (value === "Chọn voucher") {
 			if (gia) {
 				setTotal(thanhTien);
@@ -216,6 +217,7 @@ const InformationForm: React.FC<{
 				...vouchers,
 				orderId: "",
 			});
+			setSelectVoucher("Chọn voucher");
 		}
 	};
 	//form Submit
@@ -492,6 +494,7 @@ const InformationForm: React.FC<{
 						type="select"
 						id="voucher-select"
 						className="mb-3 form-select"
+						value={selectVoucher}
 						onChange={onVoucherSelectChange}
 					>
 						<option>Chọn voucher</option>
