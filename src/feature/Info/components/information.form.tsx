@@ -146,44 +146,57 @@ const InformationForm: React.FC<{
 			}
 			return;
 		}
-		const checkVoucher = await axios.get(
-			`${process.env.REACT_APP_VOUCHER_BE}check-condition?amount=${
-				total * 1000
-			}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
-			{
-				headers: {
-					user_id: userMe.user!.userId,
-					partner_id: detailApartment.maPartner,
+
+		try {
+			const applyVoucher: any = await axios.post(
+				`${process.env.REACT_APP_VOUCHER_BE}pre-order`,
+				{
+					code: value,
+					typeVoucher: TYPE_VOUCHER,
+					transactionId: uuid(),
+					amount: total * 1000,
 				},
+				{
+					headers: {
+						user_id: userMe.user!.userId,
+						partner_id: detailApartment.maPartner,
+					},
+				}
+			);
+			if (applyVoucher.status === 200) {
+				setVouchers({
+					...vouchers,
+					orderId: applyVoucher.data.data.orderId,
+				});
+				Toast.fire({
+					icon: "success",
+					title: "Áp dụng voucher thành công",
+				});
+				const checkVoucher = await axios.get(
+					`${
+						process.env.REACT_APP_VOUCHER_BE
+					}check-condition?amount=${
+						total * 1000
+					}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
+					{
+						headers: {
+							user_id: userMe.user!.userId,
+							partner_id: detailApartment.maPartner,
+						},
+					}
+				);
+				if (checkVoucher.status === 200) {
+					setTotal(total - checkVoucher.data.data.amount / 1000);
+				}
 			}
-		);
-		if (checkVoucher.status === 200) {
-			setTotal(total - checkVoucher.data.data.amount / 1000);
-		}
-		const applyVoucher = await axios.post(
-			`${process.env.REACT_APP_VOUCHER_BE}pre-order`,
-			{
-				code: value,
-				typeVoucher: TYPE_VOUCHER,
-				transactionId: uuid(),
-				amount: total * 1000,
-			},
-			{
-				headers: {
-					user_id: userMe.user!.userId,
-					partner_id: detailApartment.maPartner,
-				},
+		} catch (err: any) {
+			if (err.response.data.error.statusCode === 400) {
+				Toast.fire({
+					icon: "error",
+					title: "Mã đang được áp dụng",
+				});
+				setSelectVoucher("Chọn voucher");
 			}
-		);
-		if (applyVoucher.status === 200) {
-			setVouchers({
-				...vouchers,
-				orderId: applyVoucher.data.data.orderId,
-			});
-			Toast.fire({
-				icon: "success",
-				title: "Áp dụng voucher thành công",
-			});
 		}
 	};
 
@@ -217,6 +230,7 @@ const InformationForm: React.FC<{
 				...vouchers,
 				orderId: "",
 			});
+			setTotal(thanhTien);
 			setSelectVoucher("Chọn voucher");
 		}
 	};
