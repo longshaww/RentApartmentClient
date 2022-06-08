@@ -211,34 +211,6 @@ const NavbarApp: React.FC = () => {
 													}
 												</DropdownToggle>
 												<DropdownMenu>
-													{userMe.user
-														.type ===
-														"PARTNER" && (
-														<>
-															<Link
-																to="/newLessor"
-																className="dropdown-item"
-															>
-																Đăng
-																kí
-																villa/căn
-																hộ
-																mới
-															</Link>
-															<Link
-																to="/admin"
-																className="dropdown-item"
-															>
-																Xem
-																thông
-																kê/doanh
-																thu
-															</Link>
-															<DropdownItem
-																divider
-															/>
-														</>
-													)}
 													<div
 														className="dropdown-item"
 														onClick={

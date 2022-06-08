@@ -112,10 +112,22 @@ const CardRoom: React.FC = () => {
 			/>
 
 			{userMe.user && userMe.user.type === "PARTNER" && (
-				<CreateApartmentModal
-					listApartment={listApartment}
-					setListApartment={setListApartment}
-				/>
+				<div className="text-center mb-3 p-4 shadow">
+					<h3>Hi partner {userMe.user!.name} !</h3>
+					<h4>Action</h4>
+					<div className="d-flex justify-content-center">
+						<CreateApartmentModal
+							listApartment={listApartment}
+							setListApartment={setListApartment}
+						/>
+						<Link
+							to={`/admin/${id}/chart`}
+							className="btn btn-primary ms-2"
+						>
+							Xem thống kê
+						</Link>
+					</div>
+				</div>
 			)}
 
 			<ApartmentDetail

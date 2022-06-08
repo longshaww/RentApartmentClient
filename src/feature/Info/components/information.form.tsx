@@ -286,6 +286,14 @@ const InformationForm: React.FC<{
 						})
 					);
 				}
+				if (!vouchers.orderId) {
+					localStorage.setItem(
+						"order_id",
+						JSON.stringify({
+							maPartner: detailApartment.maPartner,
+						})
+					);
+				}
 			},
 			timer: 1000,
 		});

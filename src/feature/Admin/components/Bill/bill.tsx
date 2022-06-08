@@ -6,7 +6,7 @@ const BillComponent: React.FC<any> = ({ userMe, bill }) => {
 	return (
 		<div className="col-md-12">
 			<div className="row d-flex justify-content-center py-3 my-3">
-				<div className="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+				<div className="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3 mb-0">
 					<div className="row p-3">
 						<div className="col-xs-6 col-sm-6 col-md-6">
 							<div className="receipt-left">
