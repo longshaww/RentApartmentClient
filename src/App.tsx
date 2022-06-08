@@ -14,6 +14,9 @@ import LayoutAdmin from "./layout/Layout.admin";
 import Home from "./feature/Home/pages/Home";
 import NewLessor from "./feature/Admin/pages/NewLessor";
 import TransactionAdmin from "./feature/Admin/pages/transactions";
+import LessorChart from "./feature/Admin/pages/LessorChart";
+import UserAdmin from "./feature/Admin/pages/UserAdmin";
+import NotFound from "./components/Notfound";
 const App: React.FC = () => {
 	return (
 		<>
@@ -42,8 +45,14 @@ const App: React.FC = () => {
 							path="transactions"
 							element={<TransactionAdmin />}
 						/>
+						<Route path="user" element={<UserAdmin />} />
+						<Route
+							path=":id/chart"
+							element={<LessorChart />}
+						/>
 						<Route path="bill/:id" element={<BillDetail />} />
 					</Route>
+					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Routes>
 		</>

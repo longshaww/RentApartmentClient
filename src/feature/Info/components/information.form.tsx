@@ -273,7 +273,6 @@ const InformationForm: React.FC<{
 			title: <p>Đang xử lý</p>,
 			didOpen: () => {
 				MySwal.showLoading();
-				// sendReq(data);
 				localStorage.setItem(
 					"user_info_payment",
 					JSON.stringify(data)

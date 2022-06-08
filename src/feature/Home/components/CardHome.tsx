@@ -16,6 +16,7 @@ import { formatPrice } from "../../../utils/format.price";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import EditLessorModal from "./EditLessorModal";
 import { deleteConfirm } from "../../../utils/delete.confirm.sweet-alert";
+import { BsBarChartFill } from "react-icons/bs";
 
 const CardHome: React.FC<any> = ({
 	listLessor,
@@ -159,32 +160,43 @@ const CardHome: React.FC<any> = ({
 									</div>
 								</Link>
 								<div className="col-2 border-start d-flex flex-column">
-									<CardBody>
-										<button
-											className="btn"
-											onClick={() =>
-												onEditLessorClick(
-													item.maBct
-												)
-											}
-										>
-											<AiOutlineEdit
-												size={22}
-											/>
-										</button>
-										<button
-											className="btn"
-											onClick={() =>
-												onDeleteLessorClick(
-													item.maBct
-												)
-											}
-										>
-											<AiOutlineDelete
-												size={22}
-											/>
-										</button>
-									</CardBody>
+									{userMe.user!.type ===
+										"PARTNER" && (
+										<CardBody>
+											<button
+												className="btn"
+												onClick={() =>
+													onEditLessorClick(
+														item.maBct
+													)
+												}
+											>
+												<AiOutlineEdit
+													size={22}
+												/>
+											</button>
+											<button
+												className="btn"
+												onClick={() =>
+													onDeleteLessorClick(
+														item.maBct
+													)
+												}
+											>
+												<AiOutlineDelete
+													size={22}
+												/>
+											</button>
+											<Link
+												to={`/admin/${item.maBct}/chart`}
+												className="btn"
+											>
+												<BsBarChartFill
+													size={22}
+												/>
+											</Link>
+										</CardBody>
+									)}
 									<CardBody className="col-12 bottom-0 align-self-end">
 										<CardText className="mb-0">
 											<small className="text-primary fw-bold">

@@ -14,24 +14,30 @@ export default function AdminHome() {
 			const chartData = await axiosMethod("bill/chart", "get");
 			const tableData = await axiosMethod("bill", "get");
 			setTableData(tableData);
-			setListBill(chartData);
+			if (chartData.success) {
+				setListBill(chartData);
+			}
 		}
 		getBill();
 	}, []);
 
 	return (
-		<div className="home">
-			<FeaturedInfo />
-			<Chart
-				data={listBill}
-				title="User Analytics"
-				grid
-				dataKey="bills"
-			/>
-			<div className="homeWidgets">
-				{/* <WidgetSm /> */}
-				<WidgetLg rows={tableData} />
-			</div>
-		</div>
+		<>
+			{listBill.success && (
+				<div className="home">
+					<FeaturedInfo total={listBill.total} />
+					<Chart
+						data={listBill.data}
+						title="User Analytics"
+						grid
+						dataKey="bills"
+					/>
+					<div className="homeWidgets">
+						{/* <WidgetSm /> */}
+						<WidgetLg rows={tableData} />
+					</div>
+				</div>
+			)}
+		</>
 	);
 }
