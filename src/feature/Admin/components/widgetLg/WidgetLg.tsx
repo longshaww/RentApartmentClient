@@ -62,18 +62,22 @@ const columns: GridColDef[] = [
 
 const WidgetLg: React.FC<any> = ({ rows }) => {
 	return (
-		<div className="widgetLg">
-			<h3 className="widgetLgTitle">Latest transactions</h3>
-			<div style={{ height: 400, width: "100%" }}>
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					pageSize={5}
-					rowsPerPageOptions={[5]}
-					checkboxSelection
-				/>
-			</div>
-		</div>
+		<>
+			{rows && (
+				<div className="widgetLg">
+					<h3 className="widgetLgTitle">Latest transactions</h3>
+					<div style={{ height: 400, width: "100%" }}>
+						<DataGrid
+							rows={rows}
+							columns={columns}
+							pageSize={5}
+							rowsPerPageOptions={[5]}
+							checkboxSelection
+						/>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 

@@ -34,9 +34,9 @@ const InformationForm: React.FC<{
 	const userMe = userGlobalCheck();
 	//Info handling
 	const [inputs, setInputs] = useState<any>({
-		ten: userMe.user!.name,
-		sdt: userMe.user!.phone,
-		email: userMe.user!.email,
+		ten: userMe.user?.name,
+		sdt: userMe.user?.phone,
+		email: userMe.user?.email,
 	});
 	const [errors, setErrors] = useState<any>({
 		ten: false,
@@ -53,7 +53,11 @@ const InformationForm: React.FC<{
 	//PriceDetails handling
 	const thue = 10;
 	const [total, setTotal] = useState<any>();
-	const gia = detailApartment.gia;
+
+	let gia: any;
+	if (detailApartment) {
+		gia = detailApartment.gia;
+	}
 	let tienThue = (gia * thue) / 100;
 	let thanhTien = gia + tienThue;
 	useEffect(() => {
@@ -132,7 +136,7 @@ const InformationForm: React.FC<{
 			}
 		}
 		getVoucher();
-	}, [detailApartment.maPartner]);
+	}, [detailApartment && detailApartment.maPartner]);
 
 	//handle voucher change
 
@@ -543,26 +547,34 @@ const InformationForm: React.FC<{
 						</Button>
 					</div>
 				</Card>
-				<Card className="shadow">
-					<CardTitle
-						tag="h6"
-						className="px-3 pt-3 fw-bold d-flex justify-content-between m-0"
-					>
-						<CardText className="m-0">Thành tiền</CardText>
-						<CardText>{total && formatPrice(total)}</CardText>
-					</CardTitle>
-					<hr />
-					<CardTitle className="p-3 d-flex justify-content-between m-0">
-						<CardText className="m-0">
-							(1x) {detailApartment.tenCanHo} (1 đêm)
-						</CardText>
-						<CardText>{detailApartment.gia},000 VNĐ</CardText>
-					</CardTitle>
-					<CardTitle className="p-3 d-flex justify-content-between m-0">
-						<CardText className="m-0">Thuế</CardText>
-						<CardText>10%</CardText>
-					</CardTitle>
-				</Card>
+				{detailApartment && (
+					<Card className="shadow">
+						<CardTitle
+							tag="h6"
+							className="px-3 pt-3 fw-bold d-flex justify-content-between m-0"
+						>
+							<CardText className="m-0">
+								Thành tiền
+							</CardText>
+							<CardText>
+								{total && formatPrice(total)}
+							</CardText>
+						</CardTitle>
+						<hr />
+						<CardTitle className="p-3 d-flex justify-content-between m-0">
+							<CardText className="m-0">
+								(1x) {detailApartment.tenCanHo} (1 đêm)
+							</CardText>
+							<CardText>
+								{detailApartment.gia},000 VNĐ
+							</CardText>
+						</CardTitle>
+						<CardTitle className="p-3 d-flex justify-content-between m-0">
+							<CardText className="m-0">Thuế</CardText>
+							<CardText>10%</CardText>
+						</CardTitle>
+					</Card>
+				)}
 			</div>
 			<div className="text-end mb-5">
 				<Button

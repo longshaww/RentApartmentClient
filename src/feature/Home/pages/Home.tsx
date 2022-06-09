@@ -19,7 +19,8 @@ const Home: React.FC = () => {
 			<Container>
 				<Row>
 					<div className="col-md-3 mt-3">
-						{userMe.user!.type === "PARTNER" ? (
+						{localStorage.getItem("user_me") &&
+						userMe.user!.type === "PARTNER" ? (
 							<Sidebar />
 						) : (
 							<Filter />

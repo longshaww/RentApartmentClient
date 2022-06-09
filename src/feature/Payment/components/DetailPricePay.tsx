@@ -9,14 +9,16 @@ const DetailPricePay: React.FC<any> = ({ detailApartment }) => {
 	);
 	return (
 		<>
-			{userInfo.tongTien && detailApartment.maCanHo && (
+			{userInfo.tongTien && detailApartment && (
 				<Container className="pe-5 pt-3 mt-3 mb-5 bg_check-date">
 					<p className="fw-bold">Chi tiết giá</p>
 					<Row className="mb-3">
 						<Col xs="9" className="pe-0">
 							<p className="m-0">
 								<small>
-									{detailApartment.maBct2.tenBct},
+									{detailApartment.maBct2 &&
+										detailApartment.maBct2.tenBct}
+									,
 								</small>
 							</p>
 							<small>{detailApartment.tenCanHo}</small>

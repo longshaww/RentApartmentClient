@@ -12,7 +12,7 @@ const CheckInfo: React.FC<any> = ({ detailApartment }) => {
 
 	return (
 		<>
-			{userInfo.tongTien && detailApartment.maCanHo && (
+			{userInfo.tongTien && detailApartment && (
 				<Card className="room_info shadow">
 					<CardBody className="p-0">
 						<div>
@@ -31,7 +31,8 @@ const CheckInfo: React.FC<any> = ({ detailApartment }) => {
 								</small>
 							</CardTitle>
 							<CardSubtitle className="px-3 fw-bold mb-3">
-								{detailApartment.maBct2.tenBct}
+								{detailApartment.maBct2 &&
+									detailApartment.maBct2.tenBct}
 							</CardSubtitle>
 							<CardText className="ms-1">
 								<ul>

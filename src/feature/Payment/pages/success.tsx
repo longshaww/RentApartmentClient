@@ -111,7 +111,7 @@ const PaymentSuccess: React.FC = () => {
 
 	return (
 		<>
-			{bill.success ? (
+			{bill && bill.success ? (
 				<>
 					<BillComponent userMe={userMe} bill={bill} />
 					<div className="text-center">

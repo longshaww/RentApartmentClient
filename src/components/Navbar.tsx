@@ -206,7 +206,8 @@ const NavbarApp: React.FC = () => {
 													caret
 												>
 													{
-														userMe.user!
+														userMe
+															.user
 															.name
 													}
 												</DropdownToggle>

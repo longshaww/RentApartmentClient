@@ -8,7 +8,10 @@ const LayoutAdmin: React.FC = () => {
 	const userMe = userGlobalCheck();
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (userMe.user!.type !== "PARTNER") {
+		if (
+			localStorage.getItem("user_me") &&
+			userMe.user?.type !== "PARTNER"
+		) {
 			navigate("/");
 			Toast.fire({
 				icon: "error",

@@ -23,17 +23,17 @@ const BillComponent: React.FC<any> = ({ userMe, bill }) => {
 						</div>
 						<div className="col-xs-6 col-sm-6 col-md-6 text-right">
 							<div className="receipt-right">
-								<h5>{userMe.user!.companyName}</h5>
+								<h5>{userMe.user?.companyName}</h5>
 								<p>
-									{userMe.user!.phone}
+									{userMe.user?.phone}
 									<i className="fa fa-phone"></i>
 								</p>
 								<p>
-									{userMe.user!.email}
+									{userMe.user?.email}
 									<i className="fa fa-envelope-o"></i>
 								</p>
 								<p>
-									{userMe.user!.address}
+									{userMe.user?.address}
 									<i className="fa fa-location-arrow"></i>
 								</p>
 							</div>

@@ -14,7 +14,7 @@ export default function AdminHome() {
 			const chartData = await axiosMethod("bill/chart", "get");
 			const tableData = await axiosMethod("bill", "get");
 			setTableData(tableData);
-			if (chartData.success) {
+			if (chartData && chartData.success) {
 				setListBill(chartData);
 			}
 		}
@@ -23,7 +23,7 @@ export default function AdminHome() {
 
 	return (
 		<>
-			{listBill.success && (
+			{listBill && listBill.success && (
 				<div className="home">
 					<FeaturedInfo total={listBill.total} />
 					<Chart

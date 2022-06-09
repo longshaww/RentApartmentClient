@@ -127,7 +127,7 @@ const CardRoom: React.FC<any> = ({ setDetailLessor }) => {
 
 			{userMe.user && userMe.user.type === "PARTNER" && (
 				<div className="text-center mb-3 p-4 shadow">
-					<h3>Hi partner {userMe.user!.name} !</h3>
+					<h3>Hi partner {userMe.user?.name} !</h3>
 					<h4>Action</h4>
 					<div className="d-flex justify-content-center">
 						<CreateApartmentModal

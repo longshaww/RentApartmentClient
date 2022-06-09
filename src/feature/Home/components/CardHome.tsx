@@ -29,7 +29,7 @@ const CardHome: React.FC<any> = ({
 	useEffect(() => {
 		async function getData() {
 			let data;
-			if (userMe.user!.type === "PARTNER") {
+			if (userMe.user?.type === "PARTNER") {
 				data = await axiosMethod(
 					`lessor?partnerID=${userMe.user!.userId}`,
 					"get"
@@ -41,11 +41,11 @@ const CardHome: React.FC<any> = ({
 
 			if (
 				searchParams.get("q") === null &&
-				userMe.user!.type !== "PARTNER"
+				userMe.user?.type !== "PARTNER"
 			) {
 				data = await axiosMethod(`lessor`, "get");
 			}
-			if (data.success) {
+			if (data && data.success) {
 				setListLessor(data.body);
 			}
 		}
@@ -160,7 +160,7 @@ const CardHome: React.FC<any> = ({
 									</div>
 								</Link>
 								<div className="col-2 border-start d-flex flex-column">
-									{userMe.user!.type ===
+									{userMe.user?.type ===
 										"PARTNER" && (
 										<CardBody>
 											<button
