@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
 	Breadcrumb,
@@ -12,6 +13,7 @@ import {
 } from "reactstrap";
 import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
+import { setDetailLessor } from "../../../actions/detail.lessor";
 
 const NewApartment: React.FC<any> = ({
 	setModal,
@@ -19,6 +21,7 @@ const NewApartment: React.FC<any> = ({
 	listApartment,
 	setListApartment,
 }) => {
+	const dispatch = useDispatch();
 	const params = useParams();
 	const { id }: any = params;
 	const [inputs, setInputs] = useState<any>({
@@ -82,6 +85,14 @@ const NewApartment: React.FC<any> = ({
 		setModal(!modal);
 
 		if (data.success) {
+			const updateLessorPrice = await axiosMethod(
+				`lessor/average/${id}`,
+				"put"
+			);
+			if (updateLessorPrice.success) {
+				dispatch(setDetailLessor(updateLessorPrice.body));
+				Toast.fire({ icon: "success", title: "Updated" });
+			}
 			Toast.fire({
 				icon: "success",
 				title: "Success",

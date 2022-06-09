@@ -5,7 +5,6 @@ import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
 import { userGlobalCheck } from "../../../utils/user.me";
 import BillComponent from "../../Admin/components/Bill/bill";
-import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
 const PaymentSuccess: React.FC = () => {

@@ -1,10 +1,7 @@
-import moment from "moment";
 import { useEffect, useState } from "react";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import "../../../assets/css/bill.detail.css";
 import axiosMethod from "../../../utils/api";
-import { formatPrice } from "../../../utils/format.price";
 import { userGlobalCheck } from "../../../utils/user.me";
 import BillComponent from "../components/Bill/bill";
 

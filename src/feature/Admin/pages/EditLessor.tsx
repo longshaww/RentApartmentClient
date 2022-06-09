@@ -1,9 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
-	Breadcrumb,
-	BreadcrumbItem,
-	Button,
 	Container,
 	Form,
 	FormFeedback,
@@ -22,7 +18,6 @@ const EditLessor: React.FC<any> = ({
 	setListLessor,
 	setEditLessorModal,
 }) => {
-	const navigate = useNavigate();
 	const userMe = userGlobalCheck();
 
 	const thisLessor = listLessor.find(

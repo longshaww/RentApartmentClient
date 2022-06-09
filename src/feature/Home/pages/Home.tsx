@@ -5,7 +5,7 @@ import Search from "../components/Search";
 import CardHome from "../components/CardHome";
 import { Container, Row } from "reactstrap";
 import { userGlobalCheck } from "../../../utils/user.me";
-import LayoutAdmin from "../../../layout/Layout.admin";
+import Sidebar from "../../Admin/components/sidebar/Sidebar";
 
 const Home: React.FC = () => {
 	const userMe = userGlobalCheck();
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
 				<Row>
 					<div className="col-md-3 mt-3">
 						{userMe.user!.type === "PARTNER" ? (
-							<LayoutAdmin />
+							<Sidebar />
 						) : (
 							<Filter />
 						)}

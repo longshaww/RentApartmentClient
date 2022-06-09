@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
 	Container,
 	Form,
@@ -7,6 +9,7 @@ import {
 	Input,
 	Label,
 } from "reactstrap";
+import { setDetailLessor } from "../../../actions/detail.lessor";
 import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
 
@@ -17,6 +20,8 @@ const EditApartment: React.FC<any> = ({
 	editApartmentModal,
 	setEditApartmentModal,
 }) => {
+	const dispatch = useDispatch();
+	const { id } = useParams();
 	const thisApartment = listApartment.find((a: any) => a.maCanHo === idRoom);
 	const [inputs, setInputs] = useState<any>({
 		tenCanHo: thisApartment.tenCanHo,
@@ -85,6 +90,14 @@ const EditApartment: React.FC<any> = ({
 		setEditApartmentModal(!editApartmentModal);
 
 		if (data.success) {
+			const updateLessorPrice = await axiosMethod(
+				`lessor/average/${id}`,
+				"put"
+			);
+			if (updateLessorPrice.success) {
+				dispatch(setDetailLessor(updateLessorPrice.body));
+				Toast.fire({ icon: "success", title: "Updated" });
+			}
 			Toast.fire({
 				icon: "success",
 				title: "Success",

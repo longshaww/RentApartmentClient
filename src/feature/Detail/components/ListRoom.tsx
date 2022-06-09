@@ -27,8 +27,9 @@ import ApartmentDetail from "./ApartmentDetail";
 import EditApartmentModal from "./EditApartment.modal";
 import CreateApartmentModal from "./CreateApartment.modal";
 import { userGlobalCheck } from "../../../utils/user.me";
+import { Toast } from "../../../utils/toast.sweet-alert";
 
-const CardRoom: React.FC = () => {
+const CardRoom: React.FC<any> = ({ setDetailLessor }) => {
 	const { id } = useParams();
 	const [detailApartmentModal, setDetailApartmentModal] =
 		useState<Boolean>(false);
@@ -83,20 +84,33 @@ const CardRoom: React.FC = () => {
 		setEditApartmentModal(!editApartmentModal);
 	};
 
-	const onDeleteApartmentClick = async (id: string) => {
+	const onDeleteApartmentClick = async (idApart: string) => {
 		deleteConfirm(
 			"Apartment has been deleted",
 			"Nothing happen yet !",
 			async () => {
 				const findById = listApartment.find(
-					(a: any) => a.maCanHo === id
+					(a: any) => a.maCanHo === idApart
 				);
 				const index = listApartment.indexOf(findById);
 				setListApartment([
 					...listApartment.slice(0, index),
 					...listApartment.slice(index + 1),
 				]);
-				await axiosMethod(`apartment/${id}`, "delete");
+				const deleteApartment = await axiosMethod(
+					`apartment/${idApart}`,
+					"delete"
+				);
+				if (deleteApartment.success) {
+					const updatePrice = await axiosMethod(
+						`lessor/average/${id}`,
+						"put"
+					);
+					if (updatePrice.success) {
+						setDetailLessor(updatePrice.body);
+						Toast.fire({ icon: "success", title: "Updated" });
+					}
+				}
 			}
 		);
 	};
