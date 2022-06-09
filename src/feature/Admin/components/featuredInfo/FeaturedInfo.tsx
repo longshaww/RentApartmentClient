@@ -9,7 +9,7 @@ const FeaturedInfo: React.FC<{ total: any }> = ({ total }) => {
 				<span className="featuredTitle">Revanue</span>
 				<div className="featuredMoneyContainer">
 					<span className="featuredMoney">
-						{formatPrice(total)}
+						{total && formatPrice(total)}
 					</span>
 					{/* <span className="featuredMoneyRate">
 						-11.4{" "}
