@@ -27,7 +27,7 @@ export default function OnlinePayment() {
 		// Create PaymentIntent as soon as the page loads
 		async function getClientSecret() {
 			if (!customer.tongTien) {
-				navigate(`/${id}/booking`);
+				return navigate(`/${id}/booking`);
 			}
 			const data = await axiosMethod(`bill/charge`, "post", {
 				amount: customer.tongTien,

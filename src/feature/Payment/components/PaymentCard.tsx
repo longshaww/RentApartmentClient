@@ -1,6 +1,5 @@
 import React from "react";
 import DetailPricePay from "../components/DetailPricePay";
-import ConfirmButtonPay from "../components/ConfirmButtonPay";
 import InstallmentVoucher from "../components/InstallmentVoucher";
 
 const PaymentCard: React.FC = () => {
@@ -9,7 +8,6 @@ const PaymentCard: React.FC = () => {
 			<hr />
 			<InstallmentVoucher />
 			<DetailPricePay />
-			<ConfirmButtonPay />
 		</>
 	);
 };

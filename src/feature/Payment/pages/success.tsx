@@ -5,12 +5,12 @@ import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
 import { userGlobalCheck } from "../../../utils/user.me";
 import BillComponent from "../../Admin/components/Bill/bill";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const PaymentSuccess: React.FC = () => {
 	const userMe = userGlobalCheck();
 	const [bill, setBill] = useState<any>({});
-
+	const [searchParams, setSearchParams] = useSearchParams();
 	const userPaymentInfo = localStorage.getItem("user_info_payment") || "{}";
 	const localOrder = localStorage.getItem("order_id") || "{}";
 	const orderObj = JSON.parse(localOrder);
@@ -30,6 +30,9 @@ const PaymentSuccess: React.FC = () => {
 	}
 
 	async function sendData() {
+		if (!JSON.parse(userPaymentInfo).tongTien) {
+			return;
+		}
 		const postBill = await axiosMethod(
 			"bill",
 			"post",
@@ -38,6 +41,7 @@ const PaymentSuccess: React.FC = () => {
 		if (postBill.success) {
 			localStorage.removeItem("user_info_payment");
 			setBill(postBill);
+			setSearchParams({ billId: postBill.body.id });
 			const customizeData: any = {
 				total: postBill.body.tongTien,
 				reward: caculateReward(postBill.body.tongTien),
@@ -91,7 +95,17 @@ const PaymentSuccess: React.FC = () => {
 		}
 	}
 
+	async function reloadBill() {
+		const billRes = await axiosMethod(
+			`bill/${searchParams.get("billId")}`,
+			"get"
+		);
+		setBill(billRes);
+	}
 	useEffect(() => {
+		if (!JSON.parse(userPaymentInfo).tongTien) {
+			reloadBill();
+		}
 		sendData();
 	}, []);
 

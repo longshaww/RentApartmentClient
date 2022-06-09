@@ -9,10 +9,6 @@ import Sidebar from "../../Admin/components/sidebar/Sidebar";
 
 const Home: React.FC = () => {
 	const userMe = userGlobalCheck();
-	const accessToken = localStorage.getItem("access_token");
-	if (!accessToken) {
-		window.location.href = `${process.env.REACT_APP_LOGIN_URL}http://${window.location.host}/me`;
-	}
 
 	return (
 		<>

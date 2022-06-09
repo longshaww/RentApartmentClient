@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -8,6 +8,9 @@ import CheckInfo from "../components/CheckInfo";
 import PaymentCard from "../components/PaymentCard";
 import ATMCard from "../components/ATMCard";
 import IndexPayment from "../components/indexPayment";
+import { useParams } from "react-router-dom";
+import axiosMethod from "../../../utils/api";
+import globalStateAndAction from "../../../container/global.state.action";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -42,12 +45,23 @@ function a11yProps(index: number) {
 	};
 }
 
-export default function Payments() {
+const Payments: React.FC<any> = ({ detailApartment, setDetailApartment }) => {
 	const [value, setValue] = React.useState(0);
+	const { id } = useParams();
 
 	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
 	};
+
+	useEffect(() => {
+		async function getData() {
+			const data = await axiosMethod(`apartment/${id}`, "get");
+			setDetailApartment(data);
+		}
+		if (!detailApartment.maCanHo) {
+			getData();
+		}
+	}, [id, setDetailApartment]);
 
 	return (
 		<>
@@ -138,4 +152,6 @@ export default function Payments() {
 			</Container>
 		</>
 	);
-}
+};
+
+export default globalStateAndAction(Payments);
