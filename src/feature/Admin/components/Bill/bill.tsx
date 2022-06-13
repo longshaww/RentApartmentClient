@@ -1,5 +1,6 @@
 import moment from "moment";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { checkImageString } from "../../../../utils/check.image";
 import { formatPrice } from "../../../../utils/format.price";
 
 const BillComponent: React.FC<any> = ({ userMe, bill }) => {
@@ -76,10 +77,10 @@ const BillComponent: React.FC<any> = ({ userMe, bill }) => {
 										<div className="row">
 											<div className="col-md-auto">
 												<img
-													src={
+													src={checkImageString(
 														bill.body
 															.hinhAnhBcts
-													}
+													)}
 													className="img-fluid rounded-circle"
 													style={{
 														width: "50px",

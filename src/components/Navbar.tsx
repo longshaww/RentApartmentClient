@@ -19,11 +19,43 @@ import { ReactComponent as Icon2 } from "../assets/svg/icon2.svg";
 import { ReactComponent as Icon3 } from "../assets/svg/icon3.svg";
 import { userGlobalCheck } from "../utils/user.me";
 import { MdAccountCircle } from "react-icons/md";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const NavbarApp: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toggle = () => setIsOpen(!isOpen);
 	const userMe = userGlobalCheck();
+	const MySwal = withReactContent(Swal);
+	const accessToken = localStorage.getItem("access_token");
+
+	const onClickViewReward = async () => {
+		const res: any = await axios({
+			url: `${process.env.REACT_APP_PROFILE_BE}api/users/me`,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+		if (res.data.success) {
+			const modal = await MySwal.fire({
+				title: "Điểm của bạn",
+				icon: "success",
+				text: res.data.data.reward,
+				showDenyButton: true,
+				denyButtonColor: "#3085d6",
+				denyButtonText: "Đổi điểm",
+			});
+			if (modal.isDenied) {
+				window.location.href = `${process.env.REACT_APP_PROFILE_BE}`;
+			}
+		} else {
+			await MySwal.fire({
+				title: "Lỗi",
+				icon: "error",
+			});
+		}
+	};
 
 	const onLogOutClick = () => {
 		const { REACT_APP_LOGIN_URL } = process.env;
@@ -212,6 +244,19 @@ const NavbarApp: React.FC = () => {
 													}
 												</DropdownToggle>
 												<DropdownMenu>
+													{userMe.user
+														.type ===
+														"USER" && (
+														<div
+															className="dropdown-item"
+															onClick={
+																onClickViewReward
+															}
+														>
+															Xem
+															điểm
+														</div>
+													)}
 													<div
 														className="dropdown-item"
 														onClick={

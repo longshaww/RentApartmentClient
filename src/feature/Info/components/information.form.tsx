@@ -140,6 +140,7 @@ const InformationForm: React.FC<{
 
 	//handle voucher change
 
+	console.log(selectVoucher);
 	const onVoucherSelectChange = async (e: any) => {
 		const value = e.target.value;
 		setSelectVoucher(value);
@@ -152,14 +153,12 @@ const InformationForm: React.FC<{
 		}
 
 		try {
-			const applyVoucher: any = await axios.post(
-				`${process.env.REACT_APP_VOUCHER_BE}pre-order`,
-				{
-					code: value,
-					typeVoucher: TYPE_VOUCHER,
-					transactionId: uuid(),
-					amount: total * 1000,
-				},
+			const checkVoucher = await axios.get(
+				`${
+					process.env.REACT_APP_VOUCHER_BE
+				}check-condition?amount=${
+					total * 1000
+				}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
 				{
 					headers: {
 						user_id: userMe.user!.userId,
@@ -167,21 +166,17 @@ const InformationForm: React.FC<{
 					},
 				}
 			);
-			if (applyVoucher.status === 200) {
-				setVouchers({
-					...vouchers,
-					orderId: applyVoucher.data.data.orderId,
-				});
-				Toast.fire({
-					icon: "success",
-					title: "Áp dụng voucher thành công",
-				});
-				const checkVoucher = await axios.get(
-					`${
-						process.env.REACT_APP_VOUCHER_BE
-					}check-condition?amount=${
-						total * 1000
-					}&code=${value}&typeVoucher=${TYPE_VOUCHER}`,
+			if (checkVoucher.status === 200) {
+				setTotal(total - checkVoucher.data.data.amount / 1000);
+
+				const applyVoucher: any = await axios.post(
+					`${process.env.REACT_APP_VOUCHER_BE}pre-order`,
+					{
+						code: value,
+						typeVoucher: TYPE_VOUCHER,
+						transactionId: uuid(),
+						amount: total * 1000,
+					},
 					{
 						headers: {
 							user_id: userMe.user!.userId,
@@ -189,12 +184,19 @@ const InformationForm: React.FC<{
 						},
 					}
 				);
-				if (checkVoucher.status === 200) {
-					setTotal(total - checkVoucher.data.data.amount / 1000);
+				if (applyVoucher.status === 200) {
+					setVouchers({
+						...vouchers,
+						orderId: applyVoucher.data.data.orderId,
+					});
+					Toast.fire({
+						icon: "success",
+						title: "Áp dụng voucher thành công",
+					});
 				}
 			}
 		} catch (err: any) {
-			if (err.response.data.error.statusCode === 400) {
+			if (err) {
 				Toast.fire({
 					icon: "error",
 					title: "Mã đang được áp dụng",
@@ -240,11 +242,21 @@ const InformationForm: React.FC<{
 	};
 	//form Submit
 	const MySwal = withReactContent(Swal);
-
+	const regex = {
+		sdt: /^[0-9-+]{10,12}$/g,
+		email: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+	};
 	//Handle Submit
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		if (!inputs.ten || !inputs.email || !inputs.sdt || !stringCheckbox) {
+		if (
+			!inputs.ten ||
+			!inputs.email ||
+			!regex.email.test(inputs.email) ||
+			!inputs.sdt ||
+			!regex.sdt.test(inputs.sdt) ||
+			!stringCheckbox
+		) {
 			setErrors({
 				...errors,
 				ten: true,
@@ -258,6 +270,7 @@ const InformationForm: React.FC<{
 				text: "Vui lòng kiểm tra lại thông tin !",
 			});
 		}
+
 		const data = {
 			...inputs,
 			maKhachHang: userMe.user!.userId,

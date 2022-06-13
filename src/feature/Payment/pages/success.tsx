@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { APP_ID, TYPE_VOUCHER } from "../../../constant/constant";
+import { APP_ID, SERVICE_CODE, TYPE_VOUCHER } from "../../../constant/constant";
 import axiosMethod from "../../../utils/api";
 import { Toast } from "../../../utils/toast.sweet-alert";
 import { userGlobalCheck } from "../../../utils/user.me";
 import BillComponent from "../../Admin/components/Bill/bill";
 import { Link, useSearchParams } from "react-router-dom";
+import { checkImageString } from "../../../utils/check.image";
 
 const PaymentSuccess: React.FC = () => {
 	const userMe = userGlobalCheck();
@@ -30,6 +31,8 @@ const PaymentSuccess: React.FC = () => {
 	}
 
 	async function sendData() {
+		const success = [];
+		const errors = [];
 		if (!JSON.parse(userPaymentInfo).tongTien) {
 			return;
 		}
@@ -42,15 +45,25 @@ const PaymentSuccess: React.FC = () => {
 			localStorage.removeItem("user_info_payment");
 			setBill(postBill);
 			setSearchParams({ billId: postBill.body.id });
+
+			if (userMe.user?.type !== "USER") {
+				return Toast.fire({
+					icon: "warning",
+					title: "Partner không được tích điểm theo quy định",
+				});
+			}
 			const customizeData: any = {
 				total: postBill.body.tongTien,
-				reward: caculateReward(postBill.body.tongTien),
+				reward: caculateReward(postBill.body.tongTien) * 1000,
 				details: [
 					{
 						productName: postBill.body.tenCanHo,
 						quantity: postBill.body.soLuongCanHo,
-						thumbnail: postBill.body.hinhAnhBcts,
-						link: "test",
+						thumbnail: checkImageString(
+							postBill.body.hinhAnhBcts
+						),
+						price: postBill.body.tongTienCanHo * 1000,
+						link: `${process.env.REACT_APP_FE_URL}${postBill.body.maBct}`,
 					},
 				],
 				userId: userMe.user!.userId,
@@ -59,15 +72,19 @@ const PaymentSuccess: React.FC = () => {
 			if (orderObj.orderId) {
 				customizeData.voucherCode = orderObj.orderId;
 			}
-			const sendReward = await axios.post(
+			const sendReward: any = await axios.post(
 				`${process.env.REACT_APP_PROFILE_BE}api/orders`,
-				customizeData
+				customizeData,
+				{
+					headers: {
+						service_code: SERVICE_CODE,
+					},
+				}
 			);
-			if (sendReward.status === 201) {
-				Toast.fire({
-					icon: "success",
-					title: "Tích điểm thành công",
-				});
+			if (sendReward.data.success) {
+				success.push("Tích điểm thành công");
+			} else {
+				errors.push("Lỗi tích điểm");
 			}
 		}
 		if (orderObj.orderId) {
@@ -86,12 +103,23 @@ const PaymentSuccess: React.FC = () => {
 				}
 			);
 			if (updateVoucherState.status === 200) {
-				Toast.fire({
-					icon: "success",
-					title: "Cập nhật trang thái voucher thành công",
-				});
+				success.push("Cập nhật trang thái voucher thành công");
 				localStorage.removeItem("orderId");
+			} else {
+				errors.push("Lỗi cập nhật trạng thái voucher");
 			}
+		}
+		if (success.length) {
+			Toast.fire({
+				icon: "success",
+				title: success.join(",").toString(),
+			});
+		}
+		if (errors.length) {
+			Toast.fire({
+				icon: "error",
+				title: errors.join(",").toString(),
+			});
 		}
 	}
 

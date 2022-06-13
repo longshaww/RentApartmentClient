@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Card, CardBody, CardTitle, CardSubtitle, CardText } from "reactstrap";
 import axiosMethod from "../../../utils/api";
 import globalStateAndAction from "../../../container/global.state.action";
+import { checkImageString } from "../../../utils/check.image";
 
 const RoomInfo: React.FC<{
 	setDetailApartment: any;
@@ -102,9 +103,11 @@ const RoomInfo: React.FC<{
 									className="rounded-3"
 									src={
 										detailApartment.hinhAnhCanHos &&
-										detailApartment
-											.hinhAnhCanHos[0]
-											.urlImageCanHo
+										checkImageString(
+											detailApartment
+												.hinhAnhCanHos[0]
+												.urlImageCanHo
+										)
 									}
 									style={{
 										width: "7rem",

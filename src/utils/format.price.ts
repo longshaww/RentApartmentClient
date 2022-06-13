@@ -1,9 +1,9 @@
 export function formatPrice(price: number) {
 	if (price.toString().includes(".")) {
-		return price + "00 VND";
+		return price.toLocaleString() + "00 VND";
 	}
 	if (price === 0) {
-		return price + " VNĐ";
+		return price.toLocaleString() + " VNĐ";
 	}
-	return price + ".000 VNĐ";
+	return price.toLocaleString() + ".000 VNĐ";
 }

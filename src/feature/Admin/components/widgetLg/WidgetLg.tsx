@@ -1,6 +1,8 @@
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import { AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { checkImageString } from "../../../../utils/check.image";
+import { formatPrice } from "../../../../utils/format.price";
 
 import "./widgetLg.css";
 
@@ -18,7 +20,9 @@ const columns: GridColDef[] = [
 						className="d-flex text-decoration-none text-dark"
 					>
 						<img
-							src={params.row.hinhAnhBcts}
+							src={checkImageString(
+								params.row.hinhAnhBcts
+							)}
 							className="img-fluid rounded-circle me-2"
 							style={{
 								width: "50px",
@@ -39,10 +43,19 @@ const columns: GridColDef[] = [
 	{
 		field: "tongTienCanHo",
 		headerName: "Sub Total",
-		type: "number",
 		width: 150,
+		renderCell: (params) => {
+			return <>{formatPrice(params.row.tongTienCanHo)}</>;
+		},
 	},
-	{ field: "tongTien", headerName: "Total", type: "number", width: 150 },
+	{
+		field: "tongTien",
+		headerName: "Total",
+		width: 150,
+		renderCell: (params) => {
+			return <>{formatPrice(params.row.tongTien)}</>;
+		},
+	},
 
 	{
 		field: "action",

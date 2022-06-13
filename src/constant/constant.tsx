@@ -9,6 +9,7 @@ const FETCHED_USER = "FETCHED_USER";
 const SET_LESSOR_EDIT_ID = "SET_LESSOR_EDIT_ID";
 const SET_EDIT_LESSOR_MODAL = "SET_EDIT_LESSOR_MODAL";
 const TYPE_VOUCHER = "apart";
+const SERVICE_CODE = "APART";
 const APP_ID = "vy03";
 // Others
 
@@ -24,4 +25,5 @@ export {
 	SET_EDIT_LESSOR_MODAL,
 	APP_ID,
 	TYPE_VOUCHER,
+	SERVICE_CODE,
 };
